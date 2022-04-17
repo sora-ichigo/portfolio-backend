@@ -21,11 +21,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
-      - name: Terraform Init
-        id: init
-        env:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: cd terraform && terraform init
+      - name: Terraform init
+        run: terraform init
+        working-directory: terraform
+      - name: Terraform plan
+        run: terraform plan
+        working-directory: terraform
       - name: deploy
-        run: make deploy
+        run: make package

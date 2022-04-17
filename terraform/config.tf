@@ -9,8 +9,9 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "tfstate-igsr5"
+    bucket = "tfstate-igsr5-portfolio-server-api"
     key    = "igsr5-terraform/terraform.tfstate"
     region = "ap-northeast-1"
   }
 }
+
