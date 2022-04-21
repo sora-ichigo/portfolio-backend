@@ -12,7 +12,7 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/ef63cb2a5758664c77e5b741086cbb54
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/c1966ce8b648cf0d045f5b6e35041183
       Handler: hello-world
       Runtime: go1.x
       Architectures:
@@ -29,6 +29,19 @@ Resources:
           PARAM1: VALUE
     Metadata:
       SamResourceId: HelloWorldFunction
+  HelloWorldJob:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/8d1b05030ea57e787d20559aeae1e257
+      Handler: hello-world
+      Runtime: go1.x
+      Events:
+        HelloWorld:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0,1 * * * ? *)
+    Metadata:
+      SamResourceId: HelloWorldJob
 Outputs:
   HelloWorldAPI:
     Description: API Gateway endpoint URL for Prod environment for First Function
@@ -45,4 +58,10 @@ Outputs:
     Value:
       Fn::GetAtt:
       - HelloWorldFunctionRole
+      - Arn
+  HelloWorldJobFunction:
+    Description: Job
+    Value:
+      Fn::GetAtt:
+      - HelloWorldJob
       - Arn
