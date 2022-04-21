@@ -29,3 +29,18 @@ jobs:
         working-directory: terraform
       - name: deploy
         run: make package
+      - name: Create PR
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "Update terraform/template.yml by deploy"
+          branch: update-template.yml-by-deploy
+          base: "master"
+          body: ""
+          branch-suffix: "timestamp"
+          delete-branch: true
+          title: "Update terraform/template.yml by deploy"
+      - name: PR merge
+        run: gh pr merge ${{ steps.cpr.outputs.pull-request-number }} -m -d
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN}}
