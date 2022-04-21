@@ -12,7 +12,7 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/bf9c2fb77e677760669141a550915a95
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/ef63cb2a5758664c77e5b741086cbb54
       Handler: hello-world
       Runtime: go1.x
       Architectures:
