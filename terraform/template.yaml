@@ -12,7 +12,7 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/c1966ce8b648cf0d045f5b6e35041183
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/ef63cb2a5758664c77e5b741086cbb54
       Handler: hello-world
       Runtime: go1.x
       Architectures:
@@ -32,14 +32,14 @@ Resources:
   HelloWorldJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/8d1b05030ea57e787d20559aeae1e257
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/a7cd9a3f7d04bb57bd59ae5e16ef4566
       Handler: hello-world
       Runtime: go1.x
       Events:
         HelloWorld:
           Type: Schedule
           Properties:
-            Schedule: cron(0,1 * * * ? *)
+            Schedule: cron(* * * * ? *)
     Metadata:
       SamResourceId: HelloWorldJob
 Outputs:
