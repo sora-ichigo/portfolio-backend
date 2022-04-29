@@ -29,11 +29,11 @@ Resources:
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           PARAM1: VALUE
-  HelloWorldJob:
+  UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
       Properties:
           CodeUri: job
-          Handler: hello-world
+          Handler: update-blog-data-from-rss
           Runtime: go1.x
           Events:
               HelloWorld:
@@ -53,6 +53,5 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
-  HelloWorldJobFunction:
-    Description: "Job"
+  UpdateBlogDataFromRSSJob:
     Value: !GetAtt HelloWorldJob.Arn
