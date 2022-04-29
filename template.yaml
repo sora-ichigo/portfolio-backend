@@ -34,11 +34,11 @@ Resources:
         Variables:
           DSN: !Ref DSN
       Role: !GetAtt LambdaExecutionRole.Arn
-  HelloWorldJob:
+  UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
       Properties:
           CodeUri: job
-          Handler: hello-world
+          Handler: update-blog-data-from-rss
           Runtime: go1.x
           Events:
               HelloWorld:
@@ -87,6 +87,6 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt LambdaExecutionRole.Arn
-  HelloWorldJobFunction:
+  UpdateBlogDataFromRSSJob:
     Description: "Job"
     Value: !GetAtt HelloWorldJob.Arn
