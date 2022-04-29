@@ -16,7 +16,7 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/8bc4d6e92ed7496b8ad462adfa9efbb2
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/c89a17707dffc5f362efd84942ad6b18
       Handler: hello-world
       Runtime: go1.x
       Architectures:
@@ -41,7 +41,7 @@ Resources:
   HelloWorldJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/e89ca8178ec6b72707cf6cb33ad3d514
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/575996a1d50ee444b4eccfaa8c061c1c
       Handler: hello-world
       Runtime: go1.x
       Events:
