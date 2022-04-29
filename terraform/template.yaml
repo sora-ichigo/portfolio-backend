@@ -8,11 +8,15 @@ Description: 'portfolio-api
 Globals:
   Function:
     Timeout: 5
+Parameters:
+  DSN:
+    Type: String
+    Default: /portfolio/dsn
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/70835c2eeae6c186b7cccc80fa8edd74
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/b4cd850d32d4cbc537f7bc6ea194c6dc
       Handler: hello-world
       Runtime: go1.x
       Architectures:
@@ -26,13 +30,18 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          PARAM1: VALUE
+          DSN:
+            Ref: DSN
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
     Metadata:
       SamResourceId: HelloWorldFunction
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/a3af405118da46d1f4b5d3c750e6086e
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/ea23251f4489a6558dc904e0f73757c1
       Handler: update-blog-data-from-rss
       Runtime: go1.x
       Events:
@@ -40,8 +49,47 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: cron(* * * * ? *)
+    Environment:
+      Variables:
+        DSN:
+          Ref: DSN
+    Role:
+      Fn::GetAtt:
+      - LambdaExecutionRole
+      - Arn
     Metadata:
       SamResourceId: UpdateBlogDataFromRSSJob
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Fn::Sub: lambda-execution-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Policies:
+      - PolicyName: lambda-secretmanager-policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - ssm:*
+            Resource: '*'
+    Metadata:
+      SamResourceId: LambdaExecutionRole
 Outputs:
   HelloWorldAPI:
     Description: API Gateway endpoint URL for Prod environment for First Function
@@ -57,9 +105,10 @@ Outputs:
     Description: Implicit IAM Role created for Hello World function
     Value:
       Fn::GetAtt:
-      - HelloWorldFunctionRole
+      - LambdaExecutionRole
       - Arn
   UpdateBlogDataFromRSSJob:
+    Description: Job
     Value:
       Fn::GetAtt:
       - HelloWorldJob
