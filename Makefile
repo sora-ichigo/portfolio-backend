@@ -12,6 +12,6 @@ package: sam-build
 
 # go
 migrate-create:
-	echo "$(NAME)"
+	./bin/migrate create -ext sql -dir ./migrations "$(T)"
 gen:
 	go generate ./...

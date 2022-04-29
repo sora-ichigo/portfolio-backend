@@ -12,6 +12,13 @@ This is a sample template for portfolio-api - Below is a brief explanation of wh
 └── template.yaml
 ```
 
+## Development
+### migration
+```sh
+# create migration file
+$ make migrate-create T=[FILENAME]
+```
+
 ## Requirements
 
 * AWS CLI already configured with Administrator permission
