@@ -41,7 +41,7 @@ Resources:
           Handler: update-blog-data-from-rss
           Runtime: go1.x
           Events:
-              HelloWorld:
+              UpdateBlogDataFromRSS:
                   Type: Schedule
                   Properties:
                       Schedule: cron(* * * * ? *) 
@@ -88,5 +88,4 @@ Outputs:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt LambdaExecutionRole.Arn
   UpdateBlogDataFromRSSJob:
-    Description: "Job"
-    Value: !GetAtt HelloWorldJob.Arn
+    Value: !GetAtt UpdateBlogDataFromRSSJob.Arn
