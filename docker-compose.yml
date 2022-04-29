@@ -12,3 +12,6 @@ services:
     image: golang:1.18
     volumes:
       - .:/app
+      - gomod:/go/pkg/mod
+volumes:
+  gomod:
