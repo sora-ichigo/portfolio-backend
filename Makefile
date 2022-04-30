@@ -1,3 +1,5 @@
+BIN_DIR := ${PWD}/bin
+export PATH := ${BIN_DIR}:${PATH}
 
 # sam
 S3_BUCKET=igsr5-portfolio-api-lambda-code
@@ -16,19 +18,22 @@ DSN=mysql://root:root@tcp(db:3306)/portfolio
 STEP=1
 
 .PHONY: migrate-create
-migrate-create: gen
+migrate-create: tools
 	./bin/migrate create -ext sql -dir ./migrations "$(T)"
 .PHONY: migrate
-migrate: gen
+migrate: tools
 	./bin/migrate -path migrations/ -database "$(DSN)" up
 .PHONY: rollback
-rollback: gen
+rollback: tools
 	./bin/migrate -path migrations/ -database "$(DSN)" down "$(STEP)"
 .PHONY: migrate-force
-migrate-force: gen
+migrate-force: tools
 	./bin/migrate -path migrations/ -database "$(DSN)" force "$(VERSION)"
 
 # go
-.PHONY: gen
-gen:
-	go generate ./...
+.PHONY: tools
+tools:
+	go generate ./tools.go
+.PHONY: sqlboiler
+sqlboiler: tools
+	./bin/sqlboiler -d ./bin/sqlboiler-mysql

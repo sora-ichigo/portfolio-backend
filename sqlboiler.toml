@@ -1,0 +1,12 @@
+output = "models"
+pkgname = "models"
+no-tests = true
+add-global-variants = true
+
+[mysql]
+  dbname  = "portfolio"
+  host    = "db"
+  port    = 3306
+  user    = "root"
+  pass    = "root"
+  sslmode = "false"

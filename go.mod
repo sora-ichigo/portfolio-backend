@@ -3,6 +3,7 @@ module portfolio-server-api
 go 1.18
 
 require (
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/volatiletech/sqlboiler/v4 v4.11.0
 )
@@ -48,7 +49,6 @@ require (
 	github.com/friendsofgo/errors v0.9.2 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.0 // indirect
-	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gocql/gocql v0.0.0-20210515062232-b7ef815b4556 // indirect
 	github.com/golang-jwt/jwt/v4 v4.1.0 // indirect
