@@ -12,6 +12,26 @@ This is a sample template for portfolio-api - Below is a brief explanation of wh
 └── template.yaml
 ```
 
+## Development
+### migration
+first
+```
+$ docker-compose run app bash
+```
+second, in docker container
+```sh
+# create migration file
+$ make migrate-create T=[FILENAME]
+# migrate
+$ make migrate
+# rollback(1)
+$ make rollback
+# rollback(2~)
+$ make rollback STEP=2
+# fix version
+$ make migrate-force VERSION=[VERSION]
+```
+
 ## Requirements
 
 * AWS CLI already configured with Administrator permission

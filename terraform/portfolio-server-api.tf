@@ -18,7 +18,7 @@ data "aws_cloudformation_stack" "portfolio-api-lambda" {
 resource "aws_ssm_parameter" "portfolio-dsn-production" {
   name        = "/portfolio/dsn"
   value       = "null"
-  type        = "String"
+  type        = "SecureString"
   description = "DSN"
   lifecycle {
     ignore_changes = [value]
@@ -27,7 +27,7 @@ resource "aws_ssm_parameter" "portfolio-dsn-production" {
 resource "aws_ssm_parameter" "portfolio-dsn-qa" {
   name        = "/portfolio/dsn/qa"
   value       = "null"
-  type        = "String"
+  type        = "SecureString"
   description = "DSN_QA"
   lifecycle {
     ignore_changes = [value]

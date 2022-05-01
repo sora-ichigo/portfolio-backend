@@ -16,7 +16,7 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/b4cd850d32d4cbc537f7bc6ea194c6dc
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/1b495d361f2abd237d35553cdda18ca5
       Handler: hello-world
       Runtime: go1.x
       Architectures:
@@ -41,11 +41,11 @@ Resources:
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/ea23251f4489a6558dc904e0f73757c1
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/3c74936a4617ebdb1da001dada1ba3ea
       Handler: update-blog-data-from-rss
       Runtime: go1.x
       Events:
-        HelloWorld:
+        UpdateBlogDataFromRSS:
           Type: Schedule
           Properties:
             Schedule: cron(* * * * ? *)
@@ -108,8 +108,7 @@ Outputs:
       - LambdaExecutionRole
       - Arn
   UpdateBlogDataFromRSSJob:
-    Description: Job
     Value:
       Fn::GetAtt:
-      - HelloWorldJob
+      - UpdateBlogDataFromRSSJob
       - Arn
