@@ -36,4 +36,4 @@ tools:
 	go generate ./tools.go
 .PHONY: sqlboiler
 sqlboiler: tools
-	./bin/sqlboiler -d ./bin/sqlboiler-mysql
+	./bin/sqlboiler ./bin/sqlboiler-mysql
