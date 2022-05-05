@@ -34,6 +34,6 @@ migrate-force: tools
 .PHONY: tools
 tools:
 	go generate ./tools.go
-.PHONY: sqlboiler
-sqlboiler: tools
-	./bin/sqlboiler ./bin/sqlboiler-mysql
+.PHONY: gen
+gen: tools
+	go generate ./gen.go

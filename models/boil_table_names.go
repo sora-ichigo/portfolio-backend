@@ -4,9 +4,13 @@
 package models
 
 var TableNames = struct {
-	Blogs            string
-	SchemaMigrations string
+	BlogFromManualItems string
+	BlogFromRSSItems    string
+	RSSFeeds            string
+	SchemaMigrations    string
 }{
-	Blogs:            "blogs",
-	SchemaMigrations: "schema_migrations",
+	BlogFromManualItems: "blog_from_manual_items",
+	BlogFromRSSItems:    "blog_from_rss_items",
+	RSSFeeds:            "rss_feeds",
+	SchemaMigrations:    "schema_migrations",
 }

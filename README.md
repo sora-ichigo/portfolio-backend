@@ -32,6 +32,11 @@ $ make rollback STEP=2
 $ make migrate-force VERSION=[VERSION]
 ```
 
+## generate(wire, sqlboiler, ...)
+```sh
+$ docker-compose run app make gen
+```
+
 ## Requirements
 
 * AWS CLI already configured with Administrator permission
