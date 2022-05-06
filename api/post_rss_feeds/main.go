@@ -1,4 +1,4 @@
-package main
+package post_rss_feeds
 
 import (
 	"fmt"
