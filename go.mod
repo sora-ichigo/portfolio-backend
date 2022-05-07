@@ -9,8 +9,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/igsr5/portfolio-proto/go v0.0.0-20220506150655-062fe25d437e
-	github.com/volatiletech/sqlboiler/v4 v4.10.0
-	github.com/volatiletech/strmangle v0.0.4
+	github.com/volatiletech/sqlboiler/v4 v4.6.0
 )
 
 require (
@@ -115,6 +114,7 @@ require (
 	github.com/spf13/viper v1.9.0 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/volatiletech/inflect v0.0.1 // indirect
+	github.com/volatiletech/strmangle v0.0.1 // indirect
 	github.com/xanzy/go-gitlab v0.15.0 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.0.2 // indirect

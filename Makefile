@@ -35,5 +35,8 @@ migrate-force: tools
 tools:
 	go generate ./tools.go
 .PHONY: gen
-gen: tools
+gen: tools migrate
 	go generate ./gen.go
+.PHONY: test
+test: tools migrate
+	go test ./...

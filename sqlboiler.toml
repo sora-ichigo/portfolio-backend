@@ -1,4 +1,4 @@
-output = "models"
+output = "infra/models"
 pkgname = "models"
 no-tests = true
 add-global-variants = true
