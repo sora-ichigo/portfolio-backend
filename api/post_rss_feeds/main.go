@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
-	"fmt"
+	"portfolio-server-api/config"
+	"portfolio-server-api/infra/repository"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
 	"github.com/pkg/errors"
 )
 
@@ -20,32 +23,28 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		}, errors.Wrap(err, "failed json.Unmarshal()")
 	}
 
-	fmt.Println("1")
-	// dsn, err := config.DSN("development")
-	// if err != nil {
-	// 	return events.APIGatewayProxyResponse{
-	// 		StatusCode: 500,
-	// 	}, errors.Wrap(err, "failed get dsn")
-	// }
+	dsn, err := config.DSN("development")
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+		}, errors.Wrap(err, "failed get dsn")
+	}
 
-	// fmt.Println("2")
-	// _, err = repository.NewDB(dsn)
-	// if err != nil {
-	// 	return events.APIGatewayProxyResponse{
-	// 		StatusCode: 500,
-	// 	}, errors.Wrap(err, "failed connection db")
-	// }
+	db, err := repository.NewDB(dsn)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+		}, errors.Wrap(err, "failed connection db")
+	}
 
-	// fmt.Println("3")
-	// r := repository.NewRSSFeedRepository(db)
+	r := repository.NewRSSFeedRepository(db)
 
-	// err = r.CreateRSSFeed(context.Background(), rss_feeds_pb.CreateRSSFeedRequest{Url: b.Url})
-	// if err != nil {
-	// 	return events.APIGatewayProxyResponse{
-	// 		StatusCode: 500,
-	// 	}, errors.Wrap(err, "failed create rss feed")
-	// }
-	// fmt.Println("4")
+	err = r.CreateRSSFeed(context.Background(), rss_feeds_pb.CreateRSSFeedRequest{Url: b.Url})
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+		}, errors.Wrap(err, "failed create rss feed")
+	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
