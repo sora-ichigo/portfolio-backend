@@ -5,6 +5,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: portfolio
+    ports:
+      - "3306:3306"
   app:
     image: golang:1.18
     volumes:
@@ -12,6 +14,8 @@ services:
       - gomod:/go/pkg/mod
     working_dir: /app
     depends_on:
+      - db
+    links:
       - db
 volumes:
   gomod:
