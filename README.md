@@ -1,4 +1,9 @@
 # portfolio-api
+[![Build](https://github.com/igsr5/portfolio-server-api/actions/workflows/build.yml/badge.svg)](https://github.com/igsr5/portfolio-server-api/actions/workflows/build.yml)
+[![Deploy](https://github.com/igsr5/portfolio-server-api/actions/workflows/deploy.yml/badge.svg)](https://github.com/igsr5/portfolio-server-api/actions/workflows/deploy.yml)
+[![Reviewdog](https://github.com/igsr5/portfolio-server-api/actions/workflows/reviewdog.yml/badge.svg)](https://github.com/igsr5/portfolio-server-api/actions/workflows/reviewdog.yml)
+[![Test](https://github.com/igsr5/portfolio-server-api/actions/workflows/test.yml/badge.svg)](https://github.com/igsr5/portfolio-server-api/actions/workflows/test.yml)
+![](https://img.shields.io/badge/license-MIT-green)
 
 This is a backend repository for igsr5's portfolio site.
 
