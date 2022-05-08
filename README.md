@@ -1,4 +1,4 @@
-# portfolio-api
+# portfolio-backend
 [![Build](https://github.com/igsr5/portfolio-server-api/actions/workflows/build.yml/badge.svg)](https://github.com/igsr5/portfolio-server-api/actions/workflows/build.yml)
 [![Deploy](https://github.com/igsr5/portfolio-server-api/actions/workflows/deploy.yml/badge.svg)](https://github.com/igsr5/portfolio-server-api/actions/workflows/deploy.yml)
 [![Reviewdog](https://github.com/igsr5/portfolio-server-api/actions/workflows/reviewdog.yml/badge.svg)](https://github.com/igsr5/portfolio-server-api/actions/workflows/reviewdog.yml)
