@@ -1,11 +1,11 @@
-output = "models"
+output = "infra/models"
 pkgname = "models"
 no-tests = true
 add-global-variants = true
 
 [mysql]
   dbname  = "portfolio"
-  host    = "db"
+  host    = "localhost"
   port    = 3306
   user    = "root"
   pass    = "root"
