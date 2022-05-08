@@ -23,6 +23,8 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		}, errors.Wrap(err, "failed json.Unmarshal()")
 	}
 
+	// NOTE: 今はローカルのみで動く
+	// TODO: wire でいい感じにする
 	dsn, err := config.DSN("development")
 	if err != nil {
 		return events.APIGatewayProxyResponse{
