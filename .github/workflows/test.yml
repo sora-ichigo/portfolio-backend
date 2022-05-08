@@ -5,11 +5,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      postgres:
+      db:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: portfolio
+        ports:
+          - 3306:3306
     steps:
       - uses: actions/checkout@v3
       - name: Set up Go
