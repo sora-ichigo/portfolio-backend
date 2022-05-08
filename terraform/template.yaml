@@ -7,17 +7,18 @@ Description: 'portfolio-api
   '
 Globals:
   Function:
-    Timeout: 5
+    Timeout: 15
+    MemorySize: 4096
 Parameters:
   DSN:
     Type: String
     Default: /portfolio/dsn
 Resources:
-  HelloWorldFunction:
+  PostRSSFeedsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/c89a17707dffc5f362efd84942ad6b18
-      Handler: hello-world
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/66c761a8b3912c7b6bb3896f3557593d
+      Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
       - x86_64
@@ -26,8 +27,8 @@ Resources:
         CatchAll:
           Type: Api
           Properties:
-            Path: /hello
-            Method: GET
+            Path: /rss_feeds
+            Method: POST
       Environment:
         Variables:
           DSN:
@@ -37,7 +38,7 @@ Resources:
         - LambdaExecutionRole
         - Arn
     Metadata:
-      SamResourceId: HelloWorldFunction
+      SamResourceId: PostRSSFeedsFunction
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
@@ -91,15 +92,15 @@ Resources:
     Metadata:
       SamResourceId: LambdaExecutionRole
 Outputs:
-  HelloWorldAPI:
+  API:
     Description: API Gateway endpoint URL for Prod environment for First Function
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
   HelloWorldFunction:
     Description: First Lambda Function ARN
     Value:
       Fn::GetAtt:
-      - HelloWorldFunction
+      - PostRSSFeedsFunction
       - Arn
   HelloWorldFunctionIamRole:
     Description: Implicit IAM Role created for Hello World function
