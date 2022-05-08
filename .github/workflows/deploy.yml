@@ -29,6 +29,11 @@ jobs:
         working-directory: terraform
       - name: deploy
         run: make package
+      - name: check diff
+        id: diff
+        run: |
+          git add -N .
+          git diff --exit-code
       - name: Create PR
         id: cpr
         uses: peter-evans/create-pull-request@v4
@@ -40,7 +45,9 @@ jobs:
           branch-suffix: "timestamp"
           delete-branch: true
           title: "Update terraform/template.yml by deploy"
+        if: steps.diff.outcome == 'failure'
       - name: PR merge
         run: gh pr merge ${{ steps.cpr.outputs.pull-request-number }} -m -d
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+        if: steps.diff.outcome == 'failure'
