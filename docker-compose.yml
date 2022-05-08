@@ -6,16 +6,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: portfolio
     ports:
-      - "3306:3306"
-  app:
-    image: golang:1.18
-    volumes:
-      - .:/app
-      - gomod:/go/pkg/mod
-    working_dir: /app
-    depends_on:
-      - db
-    links:
-      - db
-volumes:
-  gomod:
+      - 3306:3306
+    networks:
+      - network
+networks:
+  network:

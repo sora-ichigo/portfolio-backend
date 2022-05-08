@@ -8,13 +8,16 @@ OUTPUT_FILE=terraform/template.yaml
 .PHONY: sam-build
 sam-build:
 	sam build
+.PHONY: sam-local
+sam-local:
+	sam local start-api --docker-network portfolio-server-api_portfolio
 .PHONY: deploy
 package: sam-build
 	sam package --s3-bucket $(S3_BUCKET) --output-template-file $(OUTPUT_FILE)
 	cd terraform && terraform apply -auto-approve
 
 # migrate
-DSN=mysql://root:root@tcp(db:3306)/portfolio
+DSN=mysql://root:root@tcp(localhost:3306)/portfolio
 STEP=1
 
 .PHONY: migrate-create
@@ -35,8 +38,8 @@ migrate-force: tools
 tools:
 	go generate ./tools.go
 .PHONY: gen
-gen: tools migrate
+gen:
 	go generate ./gen.go
 .PHONY: test
-test: tools migrate
+test:
 	go test -v ./...
