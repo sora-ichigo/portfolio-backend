@@ -26,7 +26,7 @@ func TestCreateRSSFeed(t *testing.T) {
 		},
 	}
 
-	dsn, _ := config.DSN("")
+	dsn, _ := config.DSN("test")
 	db, err := NewDB(dsn)
 	if err != nil {
 		t.Fatalf("failed to NewDB. err: %v", err)

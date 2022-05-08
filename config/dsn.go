@@ -21,19 +21,19 @@ func DSN(env string) (string, error) {
 		key = "/portfolio/dsn"
 	case "qa":
 		key = "/portfolio/dsn/qa"
+	case "development":
+		return "root:root@tcp(localhost:3306)/portfolio", nil
+	case "test":
+		return "root:root@tcp(db:3306)/portfolio", nil
 	}
 
-	if key != "" {
-		output, err := svc.GetParameter(&ssm.GetParameterInput{
-			Name:           aws.String(key),
-			WithDecryption: aws.Bool(true),
-		})
-		if err != nil {
-			return "", errors.Wrap(err, "failed to ssm GetParameter")
-		}
-
-		return *output.Parameter.Value, nil
+	output, err := svc.GetParameter(&ssm.GetParameterInput{
+		Name:           aws.String(key),
+		WithDecryption: aws.Bool(true),
+	})
+	if err != nil {
+		return "", errors.Wrap(err, "failed to ssm GetParameter")
 	}
 
-	return "root:root@tcp(db:3306)/portfolio", nil
+	return *output.Parameter.Value, nil
 }

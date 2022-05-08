@@ -1,43 +1,53 @@
-package post_rss_feeds
+package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/pkg/errors"
 )
 
-// FIXME: エラーレスポンスがざる
-// FIXME: IAM ROLE の権限げきつよ
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	dsnKey := os.Getenv("DSN")
+	b := struct {
+		Url string `json:"url"`
+	}{}
 
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		Config:            aws.Config{Region: aws.String("ap-northeast-1")},
-		SharedConfigState: session.SharedConfigEnable,
-	}))
-
-	svc := ssm.New(sess)
-
-	// NOTE: 取得できた
-	_, err := svc.GetParameter(&ssm.GetParameterInput{
-		Name:           aws.String(dsnKey),
-		WithDecryption: aws.Bool(true),
-	})
-	if err != nil {
+	if err := json.Unmarshal([]byte(request.Body), &b); err != nil {
 		return events.APIGatewayProxyResponse{
-			Body:       fmt.Sprintf("%#v", err),
 			StatusCode: 500,
-		}, err
+		}, errors.Wrap(err, "failed json.Unmarshal()")
 	}
 
+	fmt.Println("1")
+	// dsn, err := config.DSN("development")
+	// if err != nil {
+	// 	return events.APIGatewayProxyResponse{
+	// 		StatusCode: 500,
+	// 	}, errors.Wrap(err, "failed get dsn")
+	// }
+
+	// fmt.Println("2")
+	// _, err = repository.NewDB(dsn)
+	// if err != nil {
+	// 	return events.APIGatewayProxyResponse{
+	// 		StatusCode: 500,
+	// 	}, errors.Wrap(err, "failed connection db")
+	// }
+
+	// fmt.Println("3")
+	// r := repository.NewRSSFeedRepository(db)
+
+	// err = r.CreateRSSFeed(context.Background(), rss_feeds_pb.CreateRSSFeedRequest{Url: b.Url})
+	// if err != nil {
+	// 	return events.APIGatewayProxyResponse{
+	// 		StatusCode: 500,
+	// 	}, errors.Wrap(err, "failed create rss feed")
+	// }
+	// fmt.Println("4")
+
 	return events.APIGatewayProxyResponse{
-		Body: fmt.Sprintf("Hello, %v", dsnKey),
-		// Body:       fmt.Sprintf("Hello, %v", *res.Parameter.Value),
 		StatusCode: 200,
 	}, nil
 }
