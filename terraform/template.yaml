@@ -17,7 +17,7 @@ Resources:
   PostRSSFeedsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/66c761a8b3912c7b6bb3896f3557593d
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/dbcc18659ea317ed870759d6f75eb168
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
@@ -42,7 +42,7 @@ Resources:
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/9646a854de9d1b9ccd4d8c387aa3a358
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/e3159a49737b502243a13059a1a9af32
       Handler: update-blog-data-from-rss
       Runtime: go1.x
       Events:
