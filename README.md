@@ -7,6 +7,10 @@
 
 This is a backend repository for igsr5's portfolio site.
 
+
+Frontend Repo - https://github.com/igsr5/portfolio-front  
+Schema Repo(Protocol Buffers) - https://github.com/igsr5/portfolio-proto
+
 ## Development
 
 ## Init
