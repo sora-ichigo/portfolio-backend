@@ -21,10 +21,10 @@ func DSN(env string) (string, error) {
 		key = "/portfolio/dsn"
 	case "qa":
 		key = "/portfolio/dsn/qa"
-	case "development":
-		return "root:root@tcp(localhost:3306)/portfolio", nil
-	case "test":
+	case "development": // sam local start-api 利用時
 		return "root:root@tcp(db:3306)/portfolio", nil
+	case "test":
+		return "root:root@tcp(localhost:3306)/portfolio", nil
 	}
 
 	output, err := svc.GetParameter(&ssm.GetParameterInput{
