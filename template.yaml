@@ -12,7 +12,7 @@ Globals:
 
 Parameters:
   DSN:
-    Type: AWS::SSM::Parameter::Value<SecureString>
+    Type: AWS::SSM::Parameter::Value<String>
     Default: ''
 
 Resources:
