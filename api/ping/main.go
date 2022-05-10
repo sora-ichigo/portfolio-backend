@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -10,9 +9,6 @@ import (
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	d := os.Getenv("DSN")
-	fmt.Println("--------------")
-	fmt.Println(d)
-	fmt.Println("--------------")
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
