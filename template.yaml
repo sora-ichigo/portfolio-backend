@@ -11,7 +11,7 @@ Globals:
     MemorySize: 4096
 
 Parameters:
-  /portfolio/dsn:
+  DSN:
     Type: AWS::SSM::Parameter::Value<SecureString>
     Default: ''
 
@@ -33,7 +33,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          DSN: !Ref /portfolio/dsn
+          DSN: !Ref DSN
       Role: !GetAtt LambdaExecutionRole.Arn
   PostRSSFeeds:
     Type: AWS::Serverless::Function
@@ -52,7 +52,7 @@ Resources:
             Method: POST
       Environment:
         Variables:
-          DSN: !Ref /portfolio/dsn
+          DSN: !Ref DSN
       Role: !GetAtt LambdaExecutionRole.Arn
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
