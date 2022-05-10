@@ -1,0 +1,8 @@
+{
+  "Ping": {
+    "DSN": "root:root@tcp(db:3306)/portfolio"
+  },
+  "PostRSSFeedsFunction": {
+    "DSN": "root:root@tcp(db:3306)/portfolio"
+  }
+}

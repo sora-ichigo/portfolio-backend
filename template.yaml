@@ -11,12 +11,31 @@ Globals:
     MemorySize: 4096
 
 Parameters:
-  DSN:
-    Type: String
-    Default: /portfolio/dsn
+  /portfolio/dsn:
+    Type: AWS::SSM::Parameter::Value<SecureString>
+    Default: ''
 
 Resources:
-  PostRSSFeedsFunction:
+  Ping:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/ping
+      Handler: ping
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: Api
+          Properties:
+            Path: /ping
+            Method: GET
+      Environment:
+        Variables:
+          DSN: !Ref /portfolio/dsn
+      Role: !GetAtt LambdaExecutionRole.Arn
+  PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: api/post_rss_feeds
@@ -33,7 +52,7 @@ Resources:
             Method: POST
       Environment:
         Variables:
-          DSN: !Ref DSN
+          DSN: !Ref /portfolio/dsn
       Role: !GetAtt LambdaExecutionRole.Arn
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
@@ -82,11 +101,9 @@ Outputs:
   API:
     Description: "API Gateway endpoint URL for Prod environment for First Function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-  HelloWorldFunction:
-    Description: "First Lambda Function ARN"
-    Value: !GetAtt PostRSSFeedsFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt LambdaExecutionRole.Arn
-  UpdateBlogDataFromRSSJob:
-    Value: !GetAtt UpdateBlogDataFromRSSJob.Arn
+      # HelloWorldFunction:
+      #   Value: !GetAtt PostRSSFeeds.Arn
+      # HelloWorldFunctionIamRole:
+      #   Value: !GetAtt LambdaExecutionRole.Arn
+      # UpdateBlogDataFromRSSJob:
+      #   Value: !GetAtt UpdateBlogDataFromRSSJob.Arn
