@@ -10,7 +10,7 @@ sam-build:
 	sam build
 .PHONY: sam-local
 sam-local:
-	sam local start-api --docker-network portfolio-server-api_portfolio
+	sam local start-api --docker-network portfolio-backend_network --env-vars env-local.json
 .PHONY: deploy
 package: sam-build
 	sam package --s3-bucket $(S3_BUCKET) --output-template-file $(OUTPUT_FILE)

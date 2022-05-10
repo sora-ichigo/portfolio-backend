@@ -1,0 +1,5 @@
+{
+  "PostRSSFeedsFunction": {
+    "DSN": "root:root@tcp(db:3306)/portfolio"
+  }
+}
