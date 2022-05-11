@@ -31,6 +31,7 @@ jobs:
         run: make package
       - name: check diff
         id: diff
+        continue-on-error: true
         run: |
           git add -N .
           git diff --exit-code
