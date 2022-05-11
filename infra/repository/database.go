@@ -2,13 +2,16 @@ package repository
 
 import (
 	"database/sql"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/pkg/errors"
 )
 
-func NewDB(dsn string) (*sql.DB, error) {
+func NewDB() (*sql.DB, error) {
+	dsn := os.Getenv("DSN")
+
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to sql.Open")

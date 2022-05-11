@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"portfolio-server-api/domain"
-	"portfolio-server-api/infra/models"
+	"portfolio-backend/domain"
+	"portfolio-backend/infra/models"
 
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
 	"github.com/lithammer/shortuuid/v3"

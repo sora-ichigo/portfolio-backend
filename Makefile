@@ -17,7 +17,8 @@ package: sam-build
 	cd terraform && terraform apply -auto-approve
 
 # migrate
-DSN=mysql://root:root@tcp(localhost:3306)/portfolio
+DB_DRIVER=mysql://
+DSN=root:root@tcp(localhost:3306)/portfolio
 STEP=1
 
 .PHONY: migrate-create
@@ -25,13 +26,13 @@ migrate-create: tools
 	./bin/migrate create -ext sql -dir ./migrations "$(T)"
 .PHONY: migrate
 migrate: tools
-	./bin/migrate -path migrations/ -database "$(DSN)" up
+	./bin/migrate -path migrations/ -database "$(DB_DRIVER)$(DSN)" up
 .PHONY: rollback
 rollback: tools
-	./bin/migrate -path migrations/ -database "$(DSN)" down "$(STEP)"
+	./bin/migrate -path migrations/ -database "$(DB_DRIVER)$(DSN)" down "$(STEP)"
 .PHONY: migrate-force
 migrate-force: tools
-	./bin/migrate -path migrations/ -database "$(DSN)" force "$(VERSION)"
+	./bin/migrate -path migrations/ -database "$(DB_DRIVER)$(DSN)" force "$(VERSION)"
 
 # go
 .PHONY: tools
@@ -42,4 +43,4 @@ gen:
 	go generate ./gen.go
 .PHONY: test
 test:
-	go test -v ./...
+	DSN="$(DSN)" go test -v ./...
