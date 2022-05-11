@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"portfolio-server-api/config"
 	"testing"
 
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
@@ -26,8 +25,7 @@ func TestCreateRSSFeed(t *testing.T) {
 		},
 	}
 
-	dsn, _ := config.DSN("test")
-	db, err := NewDB(dsn)
+	db, err := NewDB()
 	if err != nil {
 		t.Fatalf("failed to NewDB. err: %v", err)
 	}
