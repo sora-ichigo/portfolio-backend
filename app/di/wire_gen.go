@@ -14,7 +14,7 @@ import (
 // Injectors from wire.go:
 
 func NewApp() (*App, error) {
-	db, err := ProvideDB()
+	db, err := repository.NewDB()
 	if err != nil {
 		return nil, err
 	}
