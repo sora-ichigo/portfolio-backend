@@ -13,7 +13,7 @@ Globals:
 Parameters:
   DSN:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: "DSN"
+    Default: /portfolio/dsn
 
 Resources:
   Ping:
