@@ -11,7 +11,7 @@ import (
 )
 
 type PostRSSFeedsHandler interface {
-	handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+	Invoke(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 }
 
 type postRSSFeedsHandlerImpl struct {
@@ -24,14 +24,14 @@ func NewPostRSSFeedsHandler(rssFeedRepository domain.RSSFeedRepository) PostRSSF
 	}
 }
 
-func (p postRSSFeedsHandlerImpl) handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	b := struct {
 		Url string `json:"url"`
 	}{}
 
 	if err := json.Unmarshal([]byte(request.Body), &b); err != nil {
 		return events.APIGatewayProxyResponse{
-			StatusCode: 500,
+			StatusCode: 400,
 		}, errors.Wrap(err, "failed json.Unmarshal()")
 	}
 
