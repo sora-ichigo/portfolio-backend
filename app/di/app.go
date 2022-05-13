@@ -1,7 +1,7 @@
 package di
 
-import "portfolio-backend/app/handler"
+import "portfolio-backend/domain"
 
 type App struct {
-	PostRSSFeedsHandler handler.PostRSSFeedsHandler
+	PostRSSFeedsHandler domain.PostRSSFeedsHandler
 }
