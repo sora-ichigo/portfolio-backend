@@ -10,15 +10,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-type PostRSSFeedsHandler interface {
-	Invoke(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
-}
-
 type postRSSFeedsHandlerImpl struct {
 	rssFeedRepository domain.RSSFeedRepository
 }
 
-func NewPostRSSFeedsHandler(rssFeedRepository domain.RSSFeedRepository) PostRSSFeedsHandler {
+func NewPostRSSFeedsHandler(rssFeedRepository domain.RSSFeedRepository) domain.PostRSSFeedsHandler {
 	return postRSSFeedsHandlerImpl{
 		rssFeedRepository: rssFeedRepository,
 	}
