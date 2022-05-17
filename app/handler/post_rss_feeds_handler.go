@@ -26,7 +26,7 @@ func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (
 	}{}
 
 	if err := json.Unmarshal([]byte(request.Body), &b); err != nil {
-		log.Fatalf("failed json.Unmarshal() with errors: %#v", err)
+		log.Printf("failed json.Unmarshal() with errors: %#v", err)
 
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
@@ -36,7 +36,7 @@ func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (
 
 	err := p.rssFeedRepository.CreateRSSFeed(context.Background(), rss_feeds_pb.CreateRSSFeedRequest{Url: b.Url})
 	if err != nil {
-		log.Fatalf("failed create rss feed with errors: %#v", err)
+		log.Printf("failed create rss feed with errors: %#v", err)
 
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
