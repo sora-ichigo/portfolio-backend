@@ -3,11 +3,11 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"portfolio-backend/domain"
 
 	"github.com/aws/aws-lambda-go/events"
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
-	"github.com/pkg/errors"
 )
 
 type postRSSFeedsHandlerImpl struct {
@@ -26,16 +26,22 @@ func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (
 	}{}
 
 	if err := json.Unmarshal([]byte(request.Body), &b); err != nil {
+		log.Fatalf("failed json.Unmarshal() with errors: %#v", err)
+
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
-		}, errors.Wrap(err, "failed json.Unmarshal()")
+			Body:       "failed json.Unmarshal()",
+		}, nil
 	}
 
 	err := p.rssFeedRepository.CreateRSSFeed(context.Background(), rss_feeds_pb.CreateRSSFeedRequest{Url: b.Url})
 	if err != nil {
+		log.Fatalf("failed create rss feed with errors: %#v", err)
+
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
-		}, errors.Wrap(err, "failed create rss feed")
+			Body:       "failed create rss feed",
+		}, nil
 	}
 
 	return events.APIGatewayProxyResponse{
