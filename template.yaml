@@ -16,25 +16,15 @@ Parameters:
     Default: /portfolio/dsn
 
 Resources:
-  Ping:
-    Type: AWS::Serverless::Function
+  DefaultAPI:
+    Type: AWS::Serverless::HttpApi
     Properties:
-      CodeUri: api/ping
-      Handler: ping
-      Runtime: go1.x
-      Architectures:
-        - x86_64
-      Tracing: Active
-      Events:
-        CatchAll:
-          Type: Api
-          Properties:
-            Path: /ping
-            Method: GET
-      Environment:
-        Variables:
-          DSN: !Ref DSN
-      Role: !GetAtt LambdaExecutionRole.Arn
+      Domain:
+        DomainName: portfolio-api.igsr5.com
+        CertificateArn: arn:aws:acm:ap-northeast-1:799705073177:certificate/93205524-ee35-4db3-a2ec-178c97088452
+        EndpointConfiguration: REGIONAL
+        Route53:
+          HostedZoneId: Z10382141794HJUVL4L9O
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
@@ -46,10 +36,11 @@ Resources:
       Tracing: Active
       Events:
         CatchAll:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /rss_feeds
             Method: POST
+            ApiId: !Ref DefaultAPI
       Environment:
         Variables:
           DSN: !Ref DSN
@@ -97,10 +88,10 @@ Resources:
                 Action:
                     - "ssm:*"
                 Resource: "*"
-Outputs:
-  API:
-    Description: "API Gateway endpoint URL for Prod environment for First Function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+# Outputs:
+  # API:
+    # Description: "API Gateway endpoint URL for Prod environment for First Function"
+    # Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
       # HelloWorldFunction:
       #   Value: !GetAtt PostRSSFeeds.Arn
       # HelloWorldFunctionIamRole:

@@ -14,35 +14,21 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/dsn
 Resources:
-  Ping:
-    Type: AWS::Serverless::Function
+  DefaultAPI:
+    Type: AWS::Serverless::HttpApi
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/3d39da686f2f37b287928ecc0475164a
-      Handler: ping
-      Runtime: go1.x
-      Architectures:
-      - x86_64
-      Tracing: Active
-      Events:
-        CatchAll:
-          Type: Api
-          Properties:
-            Path: /ping
-            Method: GET
-      Environment:
-        Variables:
-          DSN:
-            Ref: DSN
-      Role:
-        Fn::GetAtt:
-        - LambdaExecutionRole
-        - Arn
+      Domain:
+        DomainName: portfolio-api.igsr5.com
+        CertificateArn: arn:aws:acm:ap-northeast-1:799705073177:certificate/93205524-ee35-4db3-a2ec-178c97088452
+        EndpointConfiguration: REGIONAL
+        Route53:
+          HostedZoneId: Z10382141794HJUVL4L9O
     Metadata:
-      SamResourceId: Ping
+      SamResourceId: DefaultAPI
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/fede72f6e84043f7a6eae9280a04cc28
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/1c6734d567542deb550f7ae290cfa799
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
@@ -50,10 +36,12 @@ Resources:
       Tracing: Active
       Events:
         CatchAll:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /rss_feeds
             Method: POST
+            ApiId:
+              Ref: DefaultAPI
       Environment:
         Variables:
           DSN:
@@ -64,10 +52,37 @@ Resources:
         - Arn
     Metadata:
       SamResourceId: PostRSSFeeds
+  HealthCheck:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/986c211f4a4eeb7ea4cd130d95a481c6
+      Handler: ping
+      Runtime: go1.x
+      Architectures:
+      - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /ping
+            Method: GET
+            ApiId:
+              Ref: DefaultAPI
+      Environment:
+        Variables:
+          DSN:
+            Ref: DSN
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+    Metadata:
+      SamResourceId: HealthCheck
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/f08404ebbb909d94684f4aa2c505af7d
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/6a789da2924ac24ea952fc76e6211c37
       Handler: update-blog-data-from-rss
       Runtime: go1.x
       Events:
@@ -116,8 +131,3 @@ Resources:
             Resource: '*'
     Metadata:
       SamResourceId: LambdaExecutionRole
-Outputs:
-  API:
-    Description: API Gateway endpoint URL for Prod environment for First Function
-    Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
