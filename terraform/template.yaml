@@ -28,7 +28,7 @@ Resources:
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/1c6734d567542deb550f7ae290cfa799
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/09a61b0d55db48589494591b2b2b80b8
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
@@ -52,37 +52,10 @@ Resources:
         - Arn
     Metadata:
       SamResourceId: PostRSSFeeds
-  HealthCheck:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/986c211f4a4eeb7ea4cd130d95a481c6
-      Handler: ping
-      Runtime: go1.x
-      Architectures:
-      - x86_64
-      Tracing: Active
-      Events:
-        CatchAll:
-          Type: HttpApi
-          Properties:
-            Path: /ping
-            Method: GET
-            ApiId:
-              Ref: DefaultAPI
-      Environment:
-        Variables:
-          DSN:
-            Ref: DSN
-      Role:
-        Fn::GetAtt:
-        - LambdaExecutionRole
-        - Arn
-    Metadata:
-      SamResourceId: HealthCheck
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/6a789da2924ac24ea952fc76e6211c37
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/ab2762f58f5bd84b0b35d415978ca303
       Handler: update-blog-data-from-rss
       Runtime: go1.x
       Events:
