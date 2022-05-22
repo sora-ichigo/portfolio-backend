@@ -9,6 +9,7 @@ import (
 
 type RSSFeedRepository interface {
 	CreateRSSFeed(ctx context.Context, input rss_feeds_pb.CreateRSSFeedRequest) error
+	IsExistsUrl(ctx context.Context, url string) (bool, error)
 }
 
 type PostRSSFeedsHandler interface {

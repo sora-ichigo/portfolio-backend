@@ -40,3 +40,12 @@ func (r rssFeedRepositoryImpl) CreateRSSFeed(ctx context.Context, input rss_feed
 
 	return nil
 }
+
+func (r rssFeedRepositoryImpl) IsExistsUrl(ctx context.Context, url string) (bool, error) {
+	exists, err := models.RSSFeeds(models.RSSFeedWhere.URL.EQ(url)).Exists(ctx, r.db)
+	if err != nil {
+		return exists, errors.Wrap(err, "failed to IsExistsUrl()")
+	}
+
+	return exists, nil
+}

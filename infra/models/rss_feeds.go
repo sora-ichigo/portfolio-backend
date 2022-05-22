@@ -666,6 +666,7 @@ func (o *RSSFeed) UpsertG(ctx context.Context, updateColumns, insertColumns boil
 
 var mySQLRSSFeedUniqueColumns = []string{
 	"id",
+	"url",
 }
 
 // Upsert attempts an insert using an executor, and does an update or ignore on conflict.
