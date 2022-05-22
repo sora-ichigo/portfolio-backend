@@ -43,7 +43,12 @@ $ make rollback STEP=2
 $ make migrate-force VERSION=[VERSION]
 ```
 
-## Generate(wire, sqlboiler, ...)
+### Test
+```sh
+$ make test
+```
+
+### Generate(wire, sqlboiler, ...)
 ```sh
 $ make gen
 ```
