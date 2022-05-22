@@ -44,3 +44,52 @@ func TestCreateRSSFeed(t *testing.T) {
 		})
 	}
 }
+
+func TestIsExistsUrl(t *testing.T) {
+	tests := []struct {
+		name  string
+		input rss_feeds_pb.CreateRSSFeedRequest
+		url   string
+		want  bool
+	}{
+		{
+			name:  "exists url",
+			input: rss_feeds_pb.CreateRSSFeedRequest{Url: "https://example.com/feeds/1"},
+			url:   "https://example.com/feeds/1",
+			want:  true,
+		},
+		{
+			name:  "not exists url",
+			input: rss_feeds_pb.CreateRSSFeedRequest{Url: "https://example.com/feeds/2"},
+			url:   "https://example.com/feeds/3",
+			want:  false,
+		},
+	}
+
+	db, err := NewDB()
+	if err != nil {
+		t.Fatalf("failed to NewDB. err: %v", err)
+	}
+
+	r := NewRSSFeedRepository(db)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := r.CreateRSSFeed(context.Background(), tt.input)
+
+			if err != nil {
+				t.Fatalf("failed to create rss_feed. err: %v", err)
+			}
+
+			exists, err := r.IsExistsUrl(context.Background(), tt.url)
+			if err != nil {
+				t.Fatalf("failed to IsExistsUrl(). err: %v", err)
+			}
+
+			if exists != tt.want {
+				t.Fatalf("bad exists. got: %v, want: %v", exists, tt.want)
+			}
+		})
+	}
+
+}

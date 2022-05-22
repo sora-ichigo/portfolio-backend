@@ -30,7 +30,7 @@ func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (
 
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
-			Body:       "failed json.Unmarshal()",
+			Body:       "bad request body. json field `url` is must be specifed.",
 		}, nil
 	}
 
