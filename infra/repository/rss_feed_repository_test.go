@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
@@ -29,6 +30,8 @@ func TestCreateRSSFeed(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to NewDB. err: %v", err)
 	}
+
+	deleteAllRssFeeds(t, db)
 
 	r := NewRSSFeedRepository(db)
 
@@ -92,4 +95,12 @@ func TestIsExistsUrl(t *testing.T) {
 		})
 	}
 
+}
+
+func deleteAllRssFeeds(t *testing.T, db *sql.DB) {
+	t.Helper()
+
+	if _, err := db.Exec("DELETE FROM rss_feeds"); err != nil {
+		t.Fatal(err)
+	}
 }

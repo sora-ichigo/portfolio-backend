@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"portfolio-backend/domain"
 
@@ -21,6 +22,7 @@ func NewPostRSSFeedsHandler(rssFeedRepository domain.RSSFeedRepository) domain.P
 }
 
 func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	ctx := context.Background()
 	b := struct {
 		Url string `json:"url"`
 	}{}
@@ -29,12 +31,36 @@ func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (
 		log.Printf("failed json.Unmarshal() with errors: %#v", err)
 
 		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed json.Unmarshal() with errors: %#v", err),
+		}, nil
+	}
+
+	if b.Url == "" {
+		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "bad request body. json field `url` is must be specifed.",
 		}, nil
 	}
 
-	err := p.rssFeedRepository.CreateRSSFeed(context.Background(), rss_feeds_pb.CreateRSSFeedRequest{Url: b.Url})
+	exists, err := p.rssFeedRepository.IsExistsUrl(ctx, b.Url)
+	if err != nil {
+		log.Printf("failed to IsExistsUrl() with errors: %#v", err)
+
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       "failed to check whether exists url in rss_feeds table.",
+		}, nil
+	}
+
+	if exists {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 400,
+			Body:       "bad request body. specifed `url` is already exists.",
+		}, nil
+	}
+
+	err = p.rssFeedRepository.CreateRSSFeed(ctx, rss_feeds_pb.CreateRSSFeedRequest{Url: b.Url})
 	if err != nil {
 		log.Printf("failed create rss feed with errors: %#v", err)
 
