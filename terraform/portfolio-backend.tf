@@ -24,13 +24,34 @@ resource "aws_ssm_parameter" "portfolio-dsn-production" {
     ignore_changes = [value]
   }
 }
-resource "aws_ssm_parameter" "portfolio-dsn-qa" {
-  name        = "/portfolio/dsn/qa"
+
+# resource "aws_ssm_parameter" "portfolio-dsn-qa" {
+#   name        = "/portfolio/dsn/qa"
+#   value       = "null"
+#   type        = "String"
+#   description = "DSN_QA"
+#   lifecycle {
+#     ignore_changes = [value]
+#   }
+# }
+# 
+
+resource "aws_ssm_parameter" "portfolio-sentry-dsn-production" {
+  name        = "/portfolio/sentry/dsn"
   value       = "null"
   type        = "String"
-  description = "DSN_QA"
+  description = "Sentry DSN"
   lifecycle {
     ignore_changes = [value]
   }
 }
 
+resource "aws_ssm_parameter" "portfolio-app-env-production" {
+  name        = "/portfolio/app-env"
+  value       = "null"
+  type        = "String"
+  description = "App Environment Name"
+  lifecycle {
+    ignore_changes = [value]
+  }
+}

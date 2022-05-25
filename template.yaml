@@ -5,15 +5,26 @@ Description: >
   
   Sample SAM Template for portfolio-api
 
-Globals:
-  Function:
-    Timeout: 15
-    MemorySize: 4096
-
 Parameters:
   DSN:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/dsn
+  SENTRY_DSN:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/sentry/dsn
+  APP_ENV:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/app-env
+
+Globals:
+  Function:
+    Timeout: 15
+    MemorySize: 4096
+    Environment:
+      Variables:
+        DSN: !Ref DSN
+        SENTRY_DSN: !Ref SENTRY_DSN
+        APP_ENV: !Ref APP_ENV
 
 Resources:
   DefaultAPI:
@@ -41,9 +52,6 @@ Resources:
             Path: /rss_feeds
             Method: POST
             ApiId: !Ref DefaultAPI
-      Environment:
-        Variables:
-          DSN: !Ref DSN
       Role: !GetAtt LambdaExecutionRole.Arn
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
