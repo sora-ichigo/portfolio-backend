@@ -52,6 +52,7 @@ require (
 	github.com/form3tech-oss/jwt-go v3.2.5+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.0 // indirect
+	github.com/getsentry/sentry-go v0.13.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gocql/gocql v0.0.0-20210515062232-b7ef815b4556 // indirect
 	github.com/golang-jwt/jwt/v4 v4.1.0 // indirect
@@ -88,9 +89,9 @@ require (
 	github.com/ktrysmt/go-bitbucket v0.6.4 // indirect
 	github.com/lib/pq v1.10.0 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/mattn/go-colorable v0.1.6 // indirect
+	github.com/mattn/go-colorable v0.1.11 // indirect
 	github.com/mattn/go-ieproxy v0.0.1 // indirect
-	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-sqlite3 v1.14.10 // indirect
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/mutecomm/go-sqlcipher/v4 v4.4.0 // indirect

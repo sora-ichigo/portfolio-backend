@@ -1,8 +1,7 @@
 {
-  "Ping": {
-    "DSN": "root:root@tcp(db:3306)/portfolio"
-  },
-  "PostRSSFeeds": {
-    "DSN": "root:root@tcp(db:3306)/portfolio"
+  "Global": {
+    "DSN": "root:root@tcp(db:3306)/portfolio",
+    "SENTRY_DSN": "",
+    "APP_ENV": "development"
   }
 }
