@@ -9,10 +9,10 @@ Parameters:
   DSN:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/dsn
-  SENTRY_DSN:
+  SentryDSN:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/sentry/dsn
-  APP_ENV:
+  AppEnv:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/app-env
 
@@ -23,8 +23,8 @@ Globals:
     Environment:
       Variables:
         DSN: !Ref DSN
-        SENTRY_DSN: !Ref SENTRY_DSN
-        APP_ENV: !Ref APP_ENV
+        SENTRY_DSN: !Ref SentryDSN
+        APP_ENV: !Ref AppEnv
 
 Resources:
   DefaultAPI:
