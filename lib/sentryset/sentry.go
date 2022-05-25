@@ -21,5 +21,5 @@ func init() {
 }
 
 func CleanUp() {
-	defer sentry.Flush(2 * time.Second)
+	sentry.Flush(2 * time.Second)
 }
