@@ -5,14 +5,28 @@ Description: 'portfolio-api
   Sample SAM Template for portfolio-api
 
   '
-Globals:
-  Function:
-    Timeout: 15
-    MemorySize: 4096
 Parameters:
   DSN:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/dsn
+  SentryDSN:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/sentry/dsn
+  AppEnv:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/app-env
+Globals:
+  Function:
+    Timeout: 15
+    MemorySize: 4096
+    Environment:
+      Variables:
+        DSN:
+          Ref: DSN
+        SENTRY_DSN:
+          Ref: SentryDSN
+        APP_ENV:
+          Ref: AppEnv
 Resources:
   DefaultAPI:
     Type: AWS::Serverless::HttpApi
@@ -28,7 +42,7 @@ Resources:
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/502b2d6b53b57e418fc412b2d12775e8
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/fac5946276dfc0b821834d785799f1f9
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
@@ -42,10 +56,6 @@ Resources:
             Method: POST
             ApiId:
               Ref: DefaultAPI
-      Environment:
-        Variables:
-          DSN:
-            Ref: DSN
       Role:
         Fn::GetAtt:
         - LambdaExecutionRole
