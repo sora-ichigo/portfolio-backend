@@ -42,7 +42,7 @@ Resources:
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/e05257689a9b6783eed7ca4b83a76719
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/80d7e96634c00bae63824bffc3cd982e
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
