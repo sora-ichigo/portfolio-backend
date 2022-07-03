@@ -30,7 +30,8 @@ func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (
 func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 
-	url, err := getURL(request.Body)
+	params := rss_feeds_pb.CreateRSSFeedRequest{}
+	err := json.Unmarshal([]byte(request.Body), &params)
 	if err != nil {
 		log.Printf("failed json.Unmarshal() with errors: %#v", err)
 
@@ -38,14 +39,16 @@ func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest)
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed json.Unmarshal() with errors: %#v", err),
 		}, nil
-	} else if url == "" {
+	}
+
+	if params.GetUrl() == "" {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 400,
 			Body:       "bad request body. json field `url` is must be specifed.",
 		}, nil
 	}
 
-	exists, err := p.rssFeedRepository.IsExistsUrl(ctx, url)
+	exists, err := p.rssFeedRepository.IsExistsUrl(ctx, params.GetUrl())
 	if err != nil {
 		log.Printf("failed to IsExistsUrl() with errors: %#v", err)
 
@@ -62,7 +65,7 @@ func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest)
 		}, nil
 	}
 
-	err = p.rssFeedRepository.CreateRSSFeed(ctx, rss_feeds_pb.CreateRSSFeedRequest{Url: url})
+	err = p.rssFeedRepository.CreateRSSFeed(ctx, params)
 	if err != nil {
 		log.Printf("failed create rss feed with errors: %#v", err)
 
