@@ -12,6 +12,7 @@ type RSSFeedRepository interface {
 	IsExistsUrl(ctx context.Context, url string) (bool, error)
 }
 
-type PostRSSFeedsHandler interface {
-	Invoke(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+type RSSFeedHandler interface {
+	GetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+	CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 }

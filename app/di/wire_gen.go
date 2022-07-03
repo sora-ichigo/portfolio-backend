@@ -19,9 +19,9 @@ func NewApp() (*App, error) {
 		return nil, err
 	}
 	rssFeedRepository := repository.NewRSSFeedRepository(db)
-	postRSSFeedsHandler := handler.NewPostRSSFeedsHandler(rssFeedRepository)
+	rssFeedHandler := handler.NewRSSFeedHandler(rssFeedRepository)
 	app := &App{
-		PostRSSFeedsHandler: postRSSFeedsHandler,
+		RSSFeedHandler: rssFeedHandler,
 	}
 	return app, nil
 }

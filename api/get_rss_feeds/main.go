@@ -18,5 +18,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	lambda.Start(app.RSSFeedHandler.CreateRSSFeed)
+	lambda.Start(app.RSSFeedHandler.GetRSSFeeds)
 }

@@ -59,7 +59,7 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			res, err := app.PostRSSFeedsHandler.Invoke(test.request)
+			res, err := app.RSSFeedHandler.CreateRSSFeed(test.request)
 			if err != nil {
 				t.Fatalf("failed to PostRSSFeedsHandler.Invoke(). %v", err)
 			}

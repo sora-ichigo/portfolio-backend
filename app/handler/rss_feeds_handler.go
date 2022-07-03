@@ -11,17 +11,23 @@ import (
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
 )
 
-type postRSSFeedsHandlerImpl struct {
+type rssFeedHandlerImpl struct {
 	rssFeedRepository domain.RSSFeedRepository
 }
 
-func NewPostRSSFeedsHandler(rssFeedRepository domain.RSSFeedRepository) domain.PostRSSFeedsHandler {
-	return postRSSFeedsHandlerImpl{
+func NewRSSFeedHandler(rssFeedRepository domain.RSSFeedRepository) domain.RSSFeedHandler {
+	return rssFeedHandlerImpl{
 		rssFeedRepository: rssFeedRepository,
 	}
 }
 
-func (p postRSSFeedsHandlerImpl) Invoke(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+	}, nil
+}
+
+func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 
 	url, err := getURL(request.Body)

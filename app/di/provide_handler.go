@@ -6,4 +6,6 @@ import (
 	"github.com/google/wire"
 )
 
-var HandlerSet = wire.NewSet(handler.NewPostRSSFeedsHandler)
+var HandlerSet = wire.NewSet(
+	handler.NewRSSFeedHandler,
+)
