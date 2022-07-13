@@ -22,6 +22,15 @@ func NewRSSFeedRepository(db *sql.DB) domain.RSSFeedRepository {
 	}
 }
 
+func (r rssFeedRepositoryImpl) GetRssFeeds(ctx context.Context) ([]*models.RSSFeed, error) {
+	rssFeeds, err := models.RSSFeeds().All(ctx, r.db)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get rss_feeds")
+	}
+
+	return rssFeeds, nil
+}
+
 func (r rssFeedRepositoryImpl) CreateRSSFeed(ctx context.Context, input rss_feeds_pb.CreateRSSFeedRequest) error {
 	feedUrl := input.GetUrl()
 	if feedUrl == "" {
