@@ -1,22 +1,24 @@
-package handler_test
+package handler
 
 import (
-	"context"
 	"database/sql"
-	"portfolio-backend/app/di"
-	"portfolio-backend/infra/models"
+	"portfolio-backend/domain"
+	mock_domain "portfolio-backend/domain/mock"
 	"portfolio-backend/infra/repository"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/golang/mock/gomock"
+	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
 )
 
 func TestGetRSSFeedsHeandler(t *testing.T) {
 	tests := []struct {
-		name       string
-		url        string
-		request    events.APIGatewayProxyRequest
-		statusCode int
+		name         string
+		request      events.APIGatewayProxyRequest
+		mockFn       func(mr *mock_domain.MockRSSFeedRepository)
+		statusCode   int
+		wantRssFeeds []rss_feeds_pb.RSSFeed
 	}{
 		{
 			name: "get all rss feeds",
@@ -25,15 +27,22 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 					"Content-Type": "application/json",
 				},
 			},
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				// NOTE: 先にrepositoryの実装をする
+				mr.EXPECT().GetRssFeeds(gomock.Any()).Return(gomock.Any(), nil)
+			},
 			statusCode: 200,
 		},
 	}
 
-	app, _ := setup(t)
-
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			res, err := app.RSSFeedHandler.GetRSSFeeds(test.request)
+			mockCtrl := gomock.NewController(t)
+			defer mockCtrl.Finish()
+			h, mr := setup(t, mockCtrl)
+			test.mockFn(mr)
+
+			res, err := h.GetRSSFeeds(test.request)
 			if err != nil {
 				t.Fatalf("failed to RSSFeedHandler.GetRSSFeeds(). %v", err)
 			}
@@ -47,11 +56,11 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 
 func TestPostRSSFeedsHeandler(t *testing.T) {
 	tests := []struct {
-		name            string
-		url             string
-		request         events.APIGatewayProxyRequest
-		statusCode      int
-		isCreateRssFeed bool
+		name       string
+		url        string
+		request    events.APIGatewayProxyRequest
+		mockFn     func(mr *mock_domain.MockRSSFeedRepository)
+		statusCode int
 	}{
 		{
 			name: "success",
@@ -62,8 +71,11 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 				},
 				Body: `{ "url": "http://example.com" }`,
 			},
-			statusCode:      200,
-			isCreateRssFeed: true,
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				mr.EXPECT().CreateRSSFeed(gomock.Any(), gomock.Any()).Return(nil)
+				mr.EXPECT().IsExistsUrl(gomock.Any(), "http://example.com").Return(false, nil)
+			},
+			statusCode: 200,
 		},
 		{
 			name: "bad body",
@@ -74,17 +86,19 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 				},
 				Body: "{}",
 			},
-
-			statusCode:      400,
-			isCreateRssFeed: false,
+			mockFn:     func(mr *mock_domain.MockRSSFeedRepository) {},
+			statusCode: 400,
 		},
 	}
 
-	app, db := setup(t)
-
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			res, err := app.RSSFeedHandler.CreateRSSFeed(test.request)
+			mockCtrl := gomock.NewController(t)
+			defer mockCtrl.Finish()
+			h, mr := setup(t, mockCtrl)
+			test.mockFn(mr)
+
+			res, err := h.CreateRSSFeed(test.request)
 			if err != nil {
 				t.Fatalf("failed to RSSFeedHandler.CreateRSSFeed(). %v", err)
 			}
@@ -92,16 +106,11 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 			if res.StatusCode != test.statusCode {
 				t.Fatalf("bad status code by RSSFeedHandler.CreateRSSFeed(). got: %d, want: %d", res.StatusCode, test.statusCode)
 			}
-
-			exists, _ := models.RSSFeeds(models.RSSFeedWhere.URL.EQ(test.url)).Exists(context.Background(), db)
-			if exists != test.isCreateRssFeed {
-				t.Fatalf("bad RSSFeed exists")
-			}
 		})
 	}
 }
 
-func setup(t *testing.T) (*di.App, *sql.DB) {
+func setup(t *testing.T, mockCtrl *gomock.Controller) (domain.RSSFeedHandler, *mock_domain.MockRSSFeedRepository) {
 	t.Helper()
 
 	db, err := repository.NewDB()
@@ -111,12 +120,9 @@ func setup(t *testing.T) (*di.App, *sql.DB) {
 
 	deleteAllRssFeeds(t, db)
 
-	app, err := di.NewApp()
-	if err != nil {
-		t.Fatalf("failed to di.NewApp(). %v", err)
-	}
+	mockRSSFeedRepository := mock_domain.NewMockRSSFeedRepository(mockCtrl)
 
-	return app, db
+	return NewRSSFeedHandler(mockRSSFeedRepository), mockRSSFeedRepository
 }
 
 func deleteAllRssFeeds(t *testing.T, db *sql.DB) {
