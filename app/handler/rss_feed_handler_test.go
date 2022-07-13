@@ -11,13 +11,15 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
+func TestGetRSSFeedsHeandler(t *testing.T) {
+}
 func TestPostRSSFeedsHeandler(t *testing.T) {
 	tests := []struct {
-		name       string
-		url        string
-		request    events.APIGatewayProxyRequest
-		statusCode int
-		exists     bool
+		name            string
+		url             string
+		request         events.APIGatewayProxyRequest
+		statusCode      int
+		isCreateRssFeed bool
 	}{
 		{
 			name: "success",
@@ -28,8 +30,8 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 				},
 				Body: `{ "url": "http://example.com" }`,
 			},
-			statusCode: 200,
-			exists:     true,
+			statusCode:      200,
+			isCreateRssFeed: true,
 		},
 		{
 			name: "bad body",
@@ -41,8 +43,8 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 				Body: "{}",
 			},
 
-			statusCode: 400,
-			exists:     false,
+			statusCode:      400,
+			isCreateRssFeed: false,
 		},
 	}
 	db, err := repository.NewDB()
@@ -69,7 +71,7 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 			}
 
 			exists, _ := models.RSSFeeds(models.RSSFeedWhere.URL.EQ(test.url)).Exists(context.Background(), db)
-			if exists != test.exists {
+			if exists != test.isCreateRssFeed {
 				t.Fatalf("bad RSSFeed exists")
 			}
 		})
