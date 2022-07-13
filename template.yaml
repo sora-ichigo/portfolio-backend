@@ -39,6 +39,23 @@ Resources:
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
+      CodeUri: api/get_rss_feeds
+      Handler: get_rss_feeds
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /rss_feeds
+            Method: GET
+            ApiId: !Ref DefaultAPI
+      Role: !GetAtt LambdaExecutionRole.Arn
+  PostRSSFeeds:
+    Type: AWS::Serverless::Function
+    Properties:
       CodeUri: api/post_rss_feeds
       Handler: post_rss_feeds
       Runtime: go1.x
