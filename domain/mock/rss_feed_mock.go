@@ -6,11 +6,12 @@ package mock_domain
 
 import (
 	context "context"
+	models "portfolio-backend/infra/models"
 	reflect "reflect"
 
 	events "github.com/aws/aws-lambda-go/events"
 	gomock "github.com/golang/mock/gomock"
-	rss_feed "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
+	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
 )
 
 // MockRSSFeedRepository is a mock of RSSFeedRepository interface.
@@ -37,7 +38,7 @@ func (m *MockRSSFeedRepository) EXPECT() *MockRSSFeedRepositoryMockRecorder {
 }
 
 // CreateRSSFeed mocks base method.
-func (m *MockRSSFeedRepository) CreateRSSFeed(ctx context.Context, input rss_feed.CreateRSSFeedRequest) error {
+func (m *MockRSSFeedRepository) CreateRSSFeed(ctx context.Context, input rss_feeds_pb.CreateRSSFeedRequest) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateRSSFeed", ctx, input)
 	ret0, _ := ret[0].(error)
@@ -48,6 +49,21 @@ func (m *MockRSSFeedRepository) CreateRSSFeed(ctx context.Context, input rss_fee
 func (mr *MockRSSFeedRepositoryMockRecorder) CreateRSSFeed(ctx, input interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRSSFeed", reflect.TypeOf((*MockRSSFeedRepository)(nil).CreateRSSFeed), ctx, input)
+}
+
+// GetRssFeeds mocks base method.
+func (m *MockRSSFeedRepository) GetRssFeeds(ctx context.Context) ([]*models.RSSFeed, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRssFeeds", ctx)
+	ret0, _ := ret[0].([]*models.RSSFeed)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRssFeeds indicates an expected call of GetRssFeeds.
+func (mr *MockRSSFeedRepositoryMockRecorder) GetRssFeeds(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRssFeeds", reflect.TypeOf((*MockRSSFeedRepository)(nil).GetRssFeeds), ctx)
 }
 
 // IsExistsUrl mocks base method.
