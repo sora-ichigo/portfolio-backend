@@ -3,10 +3,58 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"portfolio-backend/domain"
+	"portfolio-backend/infra/models"
+	"reflect"
 	"testing"
 
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
+
+func TestGetRSSFeeds(t *testing.T) {
+	tests := []struct {
+		name           string
+		existsRSSFeeds []domain.RSSFeed
+	}{
+		{
+			name: "get all rss feeds",
+			existsRSSFeeds: []domain.RSSFeed{
+				{
+					Id:  "aaa",
+					Url: "http://example.com/img/1",
+				},
+				{
+					Id:  "bbb",
+					Url: "http://example.com/img/2",
+				},
+			},
+		},
+	}
+
+	db, err := NewDB()
+	if err != nil {
+		t.Fatalf("failed to NewDB. err: %v", err)
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			deleteAllRssFeeds(t, db)
+			bulkInsertRssFeeds(t, db, tt.existsRSSFeeds)
+
+			r := NewRSSFeedRepository(db)
+
+			getRSSFeeds, err := r.GetRSSFeeds(context.Background())
+			if err != nil {
+				t.Fatalf("failed to GetRssFeeds. %v", err)
+			}
+
+			if !reflect.DeepEqual(getRSSFeeds, tt.existsRSSFeeds) {
+				t.Fatalf("bad value returns GetRssFeeds(). want: %v, get: %v", tt.existsRSSFeeds, getRSSFeeds)
+			}
+		})
+	}
+}
 
 func TestCreateRSSFeed(t *testing.T) {
 	tests := []struct {
@@ -93,6 +141,22 @@ func TestIsExistsUrl(t *testing.T) {
 				t.Fatalf("bad exists. got: %v, want: %v", exists, tt.want)
 			}
 		})
+	}
+
+}
+
+func bulkInsertRssFeeds(t *testing.T, db *sql.DB, rssFeeds []domain.RSSFeed) {
+	t.Helper()
+	for _, rf := range rssFeeds {
+		rssFeed := models.RSSFeed{
+			ID:  rf.Id,
+			URL: rf.Url,
+		}
+
+		err := rssFeed.Insert(context.Background(), db, boil.Infer())
+		if err != nil {
+			t.Fatalf("failed to init db rss_feeds data. %v", err)
+		}
 	}
 
 }

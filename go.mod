@@ -5,8 +5,10 @@ go 1.18
 require (
 	github.com/aws/aws-lambda-go v1.31.1
 	github.com/friendsofgo/errors v0.9.2
+	github.com/getsentry/sentry-go v0.13.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
+	github.com/golang/mock v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/igsr5/portfolio-proto/go v0.0.0-20220629162841-aaed54271304
 	github.com/lithammer/shortuuid/v3 v3.0.7
@@ -52,7 +54,6 @@ require (
 	github.com/form3tech-oss/jwt-go v3.2.5+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.0 // indirect
-	github.com/getsentry/sentry-go v0.13.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gocql/gocql v0.0.0-20210515062232-b7ef815b4556 // indirect
 	github.com/golang-jwt/jwt/v4 v4.1.0 // indirect

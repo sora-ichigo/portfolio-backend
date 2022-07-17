@@ -22,6 +22,24 @@ func NewRSSFeedRepository(db *sql.DB) domain.RSSFeedRepository {
 	}
 }
 
+func (r rssFeedRepositoryImpl) GetRSSFeeds(ctx context.Context) ([]domain.RSSFeed, error) {
+	rfs, err := models.RSSFeeds().All(ctx, r.db)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get rss_feeds")
+	}
+
+	rssFeeds := make([]domain.RSSFeed, len(rfs))
+
+	for i, rf := range rfs {
+		rssFeeds[i] = domain.RSSFeed{
+			Id:  rf.ID,
+			Url: rf.URL,
+		}
+	}
+
+	return rssFeeds, nil
+}
+
 func (r rssFeedRepositoryImpl) CreateRSSFeed(ctx context.Context, input rss_feeds_pb.CreateRSSFeedRequest) error {
 	feedUrl := input.GetUrl()
 	if feedUrl == "" {

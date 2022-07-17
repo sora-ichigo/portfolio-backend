@@ -7,7 +7,15 @@ import (
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
 )
 
+type a rss_feeds_pb.RSSFeed
+
+type RSSFeed struct {
+	Id  string
+	Url string
+}
+
 type RSSFeedRepository interface {
+	GetRSSFeeds(ctx context.Context) ([]RSSFeed, error)
 	CreateRSSFeed(ctx context.Context, input rss_feeds_pb.CreateRSSFeedRequest) error
 	IsExistsUrl(ctx context.Context, url string) (bool, error)
 }
