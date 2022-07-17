@@ -23,7 +23,7 @@ func NewRSSFeedHandler(rssFeedRepository domain.RSSFeedRepository) domain.RSSFee
 	}
 }
 
-func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (p rssFeedHandlerImpl) BatchGetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 
 	rssFeeds, err := p.rssFeedRepository.GetRSSFeeds(ctx)

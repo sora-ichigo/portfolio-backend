@@ -61,7 +61,7 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 			h, mr := setup(t, mockCtrl)
 			test.mockFn(mr)
 
-			res, err := h.GetRSSFeeds(test.request)
+			res, err := h.BatchGetRSSFeeds(test.request)
 			if err != nil {
 				t.Fatalf("failed to RSSFeedHandler.GetRSSFeeds(). %v", err)
 			}
