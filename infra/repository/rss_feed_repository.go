@@ -42,7 +42,7 @@ func (r rssFeedRepositoryImpl) GetRSSFeeds(ctx context.Context) ([]domain.RSSFee
 }
 
 func (r rssFeedRepositoryImpl) GetRSSFeed(ctx context.Context, id string) (*domain.RSSFeed, error) {
-	rf, err := models.RSSFeeds(qm.Where("id = ?", id)).One(ctx, r.db)
+	rf, err := models.RSSFeeds(models.RSSFeedWhere.ID.EQ(id)).One(ctx, r.db)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get rss_feeds")
 	}
