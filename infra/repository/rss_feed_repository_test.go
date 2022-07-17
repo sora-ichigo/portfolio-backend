@@ -195,6 +195,56 @@ func TestIsExistsUrl(t *testing.T) {
 	}
 
 }
+func TestDeleteRSSFeed(t *testing.T) {
+	tests := []struct {
+		name           string
+		targetId       string
+		existsRSSFeeds []domain.RSSFeed
+	}{
+		{
+			name:     "get all rss feeds",
+			targetId: "aaa",
+			existsRSSFeeds: []domain.RSSFeed{
+				{
+					Id:  "aaa",
+					Url: "http://example.com/img/1",
+				},
+				{
+					Id:  "bbb",
+					Url: "http://example.com/img/2",
+				},
+			},
+		},
+	}
+
+	db, err := NewDB()
+	if err != nil {
+		t.Fatalf("failed to NewDB. err: %v", err)
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			deleteAllRssFeeds(t, db)
+			bulkInsertRssFeeds(t, db, tt.existsRSSFeeds)
+
+			r := NewRSSFeedRepository(db)
+
+			err := r.DeleteRSSFeed(context.Background(), tt.targetId)
+			if err != nil {
+				t.Fatalf("failed to GetRssFeed. %v", err)
+			}
+
+			exists, err := models.RSSFeeds(models.RSSFeedWhere.URL.EQ(tt.targetId)).Exists(context.Background(), db)
+			if err != nil {
+				t.Fatalf("failed to Exists(). err: %v", err)
+			}
+
+			if exists {
+				t.Fatalf("failed to delete rss_feed. rss_feed is not deleted.")
+			}
+		})
+	}
+}
 
 func bulkInsertRssFeeds(t *testing.T, db *sql.DB, rssFeeds []domain.RSSFeed) {
 	t.Helper()

@@ -74,6 +74,20 @@ func (r rssFeedRepositoryImpl) CreateRSSFeed(ctx context.Context, input rss_feed
 	return nil
 }
 
+func (r rssFeedRepositoryImpl) DeleteRSSFeed(ctx context.Context, id string) error {
+	rf, err := models.RSSFeeds(qm.Where("id = ?", id)).One(ctx, r.db)
+	if err != nil {
+		return errors.Wrap(err, "failed to get rss_feeds")
+	}
+
+	_, err = rf.Delete(ctx, r.db)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete rss_feeds")
+	}
+
+	return nil
+}
+
 func (r rssFeedRepositoryImpl) IsExistsUrl(ctx context.Context, url string) (bool, error) {
 	exists, err := models.RSSFeeds(models.RSSFeedWhere.URL.EQ(url)).Exists(ctx, r.db)
 	if err != nil {
