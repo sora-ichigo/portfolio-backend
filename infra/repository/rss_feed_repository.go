@@ -10,6 +10,7 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 	"github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 type rssFeedRepositoryImpl struct {
@@ -38,6 +39,20 @@ func (r rssFeedRepositoryImpl) GetRSSFeeds(ctx context.Context) ([]domain.RSSFee
 	}
 
 	return rssFeeds, nil
+}
+
+func (r rssFeedRepositoryImpl) GetRSSFeed(ctx context.Context, id string) (*domain.RSSFeed, error) {
+	rf, err := models.RSSFeeds(qm.Where("id = ?", id)).One(ctx, r.db)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get rss_feeds")
+	}
+
+	rssFeed := &domain.RSSFeed{
+		Id:  rf.ID,
+		Url: rf.URL,
+	}
+
+	return rssFeed, nil
 }
 
 func (r rssFeedRepositoryImpl) CreateRSSFeed(ctx context.Context, input rss_feeds_pb.CreateRSSFeedRequest) error {

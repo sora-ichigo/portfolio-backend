@@ -2,7 +2,9 @@ package handler
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"portfolio-backend/domain"
@@ -56,6 +58,45 @@ func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (
 	}, nil
 }
 
+func (p rssFeedHandlerImpl) GetRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	ctx := context.Background()
+
+	id := request.PathParameters["id"]
+
+	rssFeed, err := p.rssFeedRepository.GetRSSFeed(ctx, id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return events.APIGatewayProxyResponse{
+				StatusCode: 404,
+				Body:       "rss feed not found",
+			}, nil
+
+		}
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed to get rss feeds errors: %#v", err),
+		}, nil
+	}
+
+	resBody := rss_feeds_pb.GetRSSFeedResponse{
+		RssFeed: &rss_feeds_pb.RSSFeed{
+			Id:  rssFeed.Id,
+			Url: rssFeed.Url,
+		}}
+
+	resBodyStr, err := json.Marshal(resBody)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed json.Unmarshal() with errors: %#v", err),
+		}, nil
+	}
+
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+		Body:       string(resBodyStr),
+	}, nil
+}
 func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 

@@ -56,6 +56,57 @@ func TestGetRSSFeeds(t *testing.T) {
 	}
 }
 
+func TestGetRSSFeed(t *testing.T) {
+	tests := []struct {
+		name           string
+		targetId       string
+		existsRSSFeeds []domain.RSSFeed
+		wantRSSFeed    *domain.RSSFeed
+	}{
+		{
+			name:     "get all rss feeds",
+			targetId: "aaa",
+			existsRSSFeeds: []domain.RSSFeed{
+				{
+					Id:  "aaa",
+					Url: "http://example.com/img/1",
+				},
+				{
+					Id:  "bbb",
+					Url: "http://example.com/img/2",
+				},
+			},
+			wantRSSFeed: &domain.RSSFeed{
+				Id:  "aaa",
+				Url: "http://example.com/img/1",
+			},
+		},
+	}
+
+	db, err := NewDB()
+	if err != nil {
+		t.Fatalf("failed to NewDB. err: %v", err)
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			deleteAllRssFeeds(t, db)
+			bulkInsertRssFeeds(t, db, tt.existsRSSFeeds)
+
+			r := NewRSSFeedRepository(db)
+
+			getRSSFeed, err := r.GetRSSFeed(context.Background(), tt.targetId)
+			if err != nil {
+				t.Fatalf("failed to GetRssFeed. %v", err)
+			}
+
+			if !reflect.DeepEqual(getRSSFeed, tt.wantRSSFeed) {
+				t.Fatalf("bad value returns GetRssFeed(). want: %v, get: %v", tt.wantRSSFeed, getRSSFeed)
+			}
+		})
+	}
+}
+
 func TestCreateRSSFeed(t *testing.T) {
 	tests := []struct {
 		name    string

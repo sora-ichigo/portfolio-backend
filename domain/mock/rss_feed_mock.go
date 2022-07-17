@@ -51,6 +51,21 @@ func (mr *MockRSSFeedRepositoryMockRecorder) CreateRSSFeed(ctx, input interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRSSFeed", reflect.TypeOf((*MockRSSFeedRepository)(nil).CreateRSSFeed), ctx, input)
 }
 
+// GetRSSFeed mocks base method.
+func (m *MockRSSFeedRepository) GetRSSFeed(ctx context.Context, id string) (*domain.RSSFeed, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRSSFeed", ctx, id)
+	ret0, _ := ret[0].(*domain.RSSFeed)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRSSFeed indicates an expected call of GetRSSFeed.
+func (mr *MockRSSFeedRepositoryMockRecorder) GetRSSFeed(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRSSFeed", reflect.TypeOf((*MockRSSFeedRepository)(nil).GetRSSFeed), ctx, id)
+}
+
 // GetRSSFeeds mocks base method.
 func (m *MockRSSFeedRepository) GetRSSFeeds(ctx context.Context) ([]domain.RSSFeed, error) {
 	m.ctrl.T.Helper()
