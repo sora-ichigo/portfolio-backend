@@ -18,6 +18,7 @@ type RSSFeedRepository interface {
 	GetRSSFeeds(ctx context.Context) ([]RSSFeed, error)
 	GetRSSFeed(ctx context.Context, id string) (*RSSFeed, error)
 	CreateRSSFeed(ctx context.Context, input rss_feeds_pb.CreateRSSFeedRequest) error
+	DeleteRSSFeed(ctx context.Context, id string) error
 	IsExistsUrl(ctx context.Context, url string) (bool, error)
 }
 
@@ -25,4 +26,5 @@ type RSSFeedHandler interface {
 	BatchGetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 	GetRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 	CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+	DeleteRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 }

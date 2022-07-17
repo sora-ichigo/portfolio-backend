@@ -42,7 +42,7 @@ func (r rssFeedRepositoryImpl) GetRSSFeeds(ctx context.Context) ([]domain.RSSFee
 }
 
 func (r rssFeedRepositoryImpl) GetRSSFeed(ctx context.Context, id string) (*domain.RSSFeed, error) {
-	rf, err := models.RSSFeeds(qm.Where("id = ?", id)).One(ctx, r.db)
+	rf, err := models.RSSFeeds(models.RSSFeedWhere.ID.EQ(id)).One(ctx, r.db)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get rss_feeds")
 	}
@@ -69,6 +69,20 @@ func (r rssFeedRepositoryImpl) CreateRSSFeed(ctx context.Context, input rss_feed
 	err := rssFeed.Insert(ctx, r.db, boil.Infer())
 	if err != nil {
 		return errors.Wrap(err, "failed to insert rss feed to db")
+	}
+
+	return nil
+}
+
+func (r rssFeedRepositoryImpl) DeleteRSSFeed(ctx context.Context, id string) error {
+	rf, err := models.RSSFeeds(qm.Where("id = ?", id)).One(ctx, r.db)
+	if err != nil {
+		return errors.Wrap(err, "failed to get rss_feeds")
+	}
+
+	_, err = rf.Delete(ctx, r.db)
+	if err != nil {
+		return errors.Wrap(err, "failed to delete rss_feeds")
 	}
 
 	return nil

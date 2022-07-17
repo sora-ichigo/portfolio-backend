@@ -13,7 +13,7 @@ import (
 	rss_feeds_pb "github.com/igsr5/portfolio-proto/go/lib/blogs/rss_feed"
 )
 
-func TestGetRSSFeedsHeandler(t *testing.T) {
+func TestBatchGetRSSFeeds(t *testing.T) {
 	tests := []struct {
 		name         string
 		request      events.APIGatewayProxyRequest
@@ -24,6 +24,7 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 		{
 			name: "get all rss feeds",
 			request: events.APIGatewayProxyRequest{
+				HTTPMethod: "GET",
 				Headers: map[string]string{
 					"Content-Type": "application/json",
 				},
@@ -83,7 +84,7 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 	}
 }
 
-func TestGetRSSFeedHeandler(t *testing.T) {
+func TestGetRSSFeed(t *testing.T) {
 	tests := []struct {
 		name        string
 		request     events.APIGatewayProxyRequest
@@ -94,7 +95,8 @@ func TestGetRSSFeedHeandler(t *testing.T) {
 		{
 			name: "get specified rss_feed",
 			request: events.APIGatewayProxyRequest{
-				Path: "/rss_feeds/aaa",
+				HTTPMethod: "GET",
+				Path:       "/rss_feeds/aaa",
 				PathParameters: map[string]string{
 					"id": "aaa",
 				},
@@ -117,7 +119,8 @@ func TestGetRSSFeedHeandler(t *testing.T) {
 		{
 			name: "not found rss_feed",
 			request: events.APIGatewayProxyRequest{
-				Path: "/rss_feeds/ccc",
+				HTTPMethod: "GET",
+				Path:       "/rss_feeds/ccc",
 				PathParameters: map[string]string{
 					"id": "ccc",
 				},
@@ -164,7 +167,7 @@ func TestGetRSSFeedHeandler(t *testing.T) {
 	}
 }
 
-func TestPostRSSFeedsHeandler(t *testing.T) {
+func TestPostRSSFeeds(t *testing.T) {
 	tests := []struct {
 		name       string
 		url        string
@@ -176,6 +179,7 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 			name: "success",
 			url:  "http://example.com",
 			request: events.APIGatewayProxyRequest{
+				HTTPMethod: "POST",
 				Headers: map[string]string{
 					"Content-Type": "application/json",
 				},
@@ -191,6 +195,7 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 			name: "bad body",
 			url:  "",
 			request: events.APIGatewayProxyRequest{
+				HTTPMethod: "POST",
 				Headers: map[string]string{
 					"Content-Type": "application/json",
 				},
@@ -203,6 +208,7 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 			name: "already exists url",
 			url:  "http://example.com",
 			request: events.APIGatewayProxyRequest{
+				HTTPMethod: "POST",
 				Headers: map[string]string{
 					"Content-Type": "application/json",
 				},
@@ -229,6 +235,67 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 
 			if res.StatusCode != test.statusCode {
 				t.Fatalf("bad status code by RSSFeedHandler.CreateRSSFeed(). got: %d, want: %d", res.StatusCode, test.statusCode)
+			}
+		})
+	}
+}
+
+func TestDeleteRSSFeeds(t *testing.T) {
+	tests := []struct {
+		name       string
+		request    events.APIGatewayProxyRequest
+		mockFn     func(mr *mock_domain.MockRSSFeedRepository)
+		statusCode int
+	}{
+		{
+			name: "success delete",
+			request: events.APIGatewayProxyRequest{
+				HTTPMethod: "DELETE",
+				Path:       "/rss_feeds/aaa",
+				PathParameters: map[string]string{
+					"id": "aaa",
+				},
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+			},
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				mr.EXPECT().DeleteRSSFeed(gomock.Any(), "aaa").Return(nil)
+			},
+			statusCode: 200,
+		},
+		{
+			name: "not found rss_feed",
+			request: events.APIGatewayProxyRequest{
+				Path: "/rss_feeds/aaa",
+				PathParameters: map[string]string{
+					"id": "aaa",
+				},
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+			},
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				mr.EXPECT().DeleteRSSFeed(gomock.Any(), "aaa").Return(sql.ErrNoRows)
+			},
+			statusCode: 404,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			defer mockCtrl.Finish()
+			h, mr := setup(t, mockCtrl)
+			test.mockFn(mr)
+
+			res, err := h.DeleteRSSFeed(test.request)
+			if err != nil {
+				t.Fatalf("failed to RSSFeedHandler.DeleteRSSFeed(). %v", err)
+			}
+
+			if res.StatusCode != test.statusCode {
+				t.Fatalf("bad status code by RSSFeedHandler.DeleteRSSFeed(). got: %d, want: %d", res.StatusCode, test.statusCode)
 			}
 		})
 	}
