@@ -26,4 +26,5 @@ type RSSFeedHandler interface {
 	BatchGetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 	GetRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 	CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+	DeleteRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 }

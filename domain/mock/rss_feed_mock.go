@@ -51,6 +51,20 @@ func (mr *MockRSSFeedRepositoryMockRecorder) CreateRSSFeed(ctx, input interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRSSFeed", reflect.TypeOf((*MockRSSFeedRepository)(nil).CreateRSSFeed), ctx, input)
 }
 
+// DeleteRSSFeed mocks base method.
+func (m *MockRSSFeedRepository) DeleteRSSFeed(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteRSSFeed", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteRSSFeed indicates an expected call of DeleteRSSFeed.
+func (mr *MockRSSFeedRepositoryMockRecorder) DeleteRSSFeed(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteRSSFeed", reflect.TypeOf((*MockRSSFeedRepository)(nil).DeleteRSSFeed), ctx, id)
+}
+
 // GetRSSFeed mocks base method.
 func (m *MockRSSFeedRepository) GetRSSFeed(ctx context.Context, id string) (*domain.RSSFeed, error) {
 	m.ctrl.T.Helper()
@@ -119,6 +133,21 @@ func (m *MockRSSFeedHandler) EXPECT() *MockRSSFeedHandlerMockRecorder {
 	return m.recorder
 }
 
+// BatchGetRSSFeeds mocks base method.
+func (m *MockRSSFeedHandler) BatchGetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BatchGetRSSFeeds", request)
+	ret0, _ := ret[0].(events.APIGatewayProxyResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BatchGetRSSFeeds indicates an expected call of BatchGetRSSFeeds.
+func (mr *MockRSSFeedHandlerMockRecorder) BatchGetRSSFeeds(request interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchGetRSSFeeds", reflect.TypeOf((*MockRSSFeedHandler)(nil).BatchGetRSSFeeds), request)
+}
+
 // CreateRSSFeed mocks base method.
 func (m *MockRSSFeedHandler) CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	m.ctrl.T.Helper()
@@ -134,17 +163,17 @@ func (mr *MockRSSFeedHandlerMockRecorder) CreateRSSFeed(request interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRSSFeed", reflect.TypeOf((*MockRSSFeedHandler)(nil).CreateRSSFeed), request)
 }
 
-// GetRSSFeeds mocks base method.
-func (m *MockRSSFeedHandler) GetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+// GetRSSFeed mocks base method.
+func (m *MockRSSFeedHandler) GetRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetRSSFeeds", request)
+	ret := m.ctrl.Call(m, "GetRSSFeed", request)
 	ret0, _ := ret[0].(events.APIGatewayProxyResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetRSSFeeds indicates an expected call of GetRSSFeeds.
-func (mr *MockRSSFeedHandlerMockRecorder) GetRSSFeeds(request interface{}) *gomock.Call {
+// GetRSSFeed indicates an expected call of GetRSSFeed.
+func (mr *MockRSSFeedHandlerMockRecorder) GetRSSFeed(request interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRSSFeeds", reflect.TypeOf((*MockRSSFeedHandler)(nil).GetRSSFeeds), request)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRSSFeed", reflect.TypeOf((*MockRSSFeedHandler)(nil).GetRSSFeed), request)
 }

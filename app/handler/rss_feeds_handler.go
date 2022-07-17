@@ -97,6 +97,7 @@ func (p rssFeedHandlerImpl) GetRSSFeed(request events.APIGatewayProxyRequest) (e
 		Body:       string(resBodyStr),
 	}, nil
 }
+
 func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 
@@ -158,4 +159,29 @@ func getURL(body string) (string, error) {
 	err := json.Unmarshal([]byte(body), &b)
 
 	return b.Url, err
+}
+
+func (p rssFeedHandlerImpl) DeleteRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	ctx := context.Background()
+
+	id := request.PathParameters["id"]
+
+	err := p.rssFeedRepository.DeleteRSSFeed(ctx, id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return events.APIGatewayProxyResponse{
+				StatusCode: 404,
+				Body:       "rss feed not found",
+			}, nil
+
+		}
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed to get rss feeds errors: %#v", err),
+		}, err
+	}
+
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+	}, nil
 }
