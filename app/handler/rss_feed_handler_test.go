@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"database/sql"
 	"encoding/json"
 	"portfolio-backend/domain"
 	mock_domain "portfolio-backend/domain/mock"
@@ -77,6 +78,87 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 
 			if !reflect.DeepEqual(resBody.RssFeeds, test.wantRssFeeds) {
 				t.Fatalf("bad response body. got: %v, want: %v", resBody.RssFeeds, test.wantRssFeeds)
+			}
+		})
+	}
+}
+
+func TestGetRSSFeedHeandler(t *testing.T) {
+	tests := []struct {
+		name        string
+		request     events.APIGatewayProxyRequest
+		mockFn      func(mr *mock_domain.MockRSSFeedRepository)
+		statusCode  int
+		wantRssFeed *rss_feeds_pb.RSSFeed
+	}{
+		{
+			name: "get specified rss_feed",
+			request: events.APIGatewayProxyRequest{
+				Path: "/rss_feeds/aaa",
+				PathParameters: map[string]string{
+					"id": "aaa",
+				},
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+			},
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				mr.EXPECT().GetRSSFeed(gomock.Any(), "aaa").Return(&domain.RSSFeed{
+					Id:  "aaa",
+					Url: "http://example.com/1",
+				}, nil)
+			},
+			statusCode: 200,
+			wantRssFeed: &rss_feeds_pb.RSSFeed{
+				Id:  "aaa",
+				Url: "http://example.com/1",
+			},
+		},
+		{
+			name: "not found rss_feed",
+			request: events.APIGatewayProxyRequest{
+				Path: "/rss_feeds/ccc",
+				PathParameters: map[string]string{
+					"id": "ccc",
+				},
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+			},
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				mr.EXPECT().GetRSSFeed(gomock.Any(), "ccc").Return(nil, sql.ErrNoRows)
+			},
+			statusCode:  404,
+			wantRssFeed: nil,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			defer mockCtrl.Finish()
+			h, mr := setup(t, mockCtrl)
+			test.mockFn(mr)
+
+			res, err := h.GetRSSFeed(test.request)
+			if err != nil {
+				t.Fatalf("failed to RSSFeedHandler.GetRSSFeed(). %v", err)
+			}
+
+			if res.StatusCode != test.statusCode {
+				t.Fatalf("bad status code by RSSFeedHandler.GetRSSFeed(). got: %d, want: %d", res.StatusCode, test.statusCode)
+			}
+
+			if res.StatusCode == 200 {
+				var resBody rss_feeds_pb.GetRSSFeedResponse
+				err = json.Unmarshal([]byte(res.Body), &resBody)
+				if err != nil {
+					t.Fatalf("failed to unmarshal response body. %v", err)
+				}
+
+				if !reflect.DeepEqual(resBody.RssFeed, test.wantRssFeed) {
+					t.Fatalf("bad response body. got: %v, want: %v", resBody.RssFeed, test.wantRssFeed)
+				}
 			}
 		})
 	}

@@ -23,5 +23,6 @@ type RSSFeedRepository interface {
 
 type RSSFeedHandler interface {
 	GetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+	GetRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 	CreateRSSFeed(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 }
