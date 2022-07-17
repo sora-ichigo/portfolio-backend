@@ -36,7 +36,9 @@ Resources:
         EndpointConfiguration: REGIONAL
         Route53:
           HostedZoneId: Z10382141794HJUVL4L9O
-  PostRSSFeeds:
+
+  # GET:/rss_feeds ===============================================
+  GetRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: api/get_rss_feeds
@@ -53,6 +55,9 @@ Resources:
             Method: GET
             ApiId: !Ref DefaultAPI
       Role: !GetAtt LambdaExecutionRole.Arn
+  # GET:/rss_feeds ===============================================
+ 
+  # POST:/rss_feeds ==============================================
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
@@ -70,6 +75,7 @@ Resources:
             Method: POST
             ApiId: !Ref DefaultAPI
       Role: !GetAtt LambdaExecutionRole.Arn
+  # POST:/rss_feeds ==============================================
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
       Properties:
