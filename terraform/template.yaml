@@ -39,10 +39,33 @@ Resources:
           HostedZoneId: Z10382141794HJUVL4L9O
     Metadata:
       SamResourceId: DefaultAPI
+  GetRSSFeeds:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/e5d2f51b4aaa1e2d69733140749d7762
+      Handler: get_rss_feeds
+      Runtime: go1.x
+      Architectures:
+      - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /rss_feeds
+            Method: GET
+            ApiId:
+              Ref: DefaultAPI
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+    Metadata:
+      SamResourceId: GetRSSFeeds
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/80d7e96634c00bae63824bffc3cd982e
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/f336084212cc414c5009f68aaed5b31c
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
