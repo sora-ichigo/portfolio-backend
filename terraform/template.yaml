@@ -42,8 +42,8 @@ Resources:
   GetRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/9f4759fb1fb3ade7112cf729f84ad2f4
-      Handler: get_rss_feed
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/69b47c289d7d289eb90a18863cf61787
+      Handler: delete_rss_feed
       Runtime: go1.x
       Architectures:
       - x86_64
@@ -53,7 +53,7 @@ Resources:
           Type: HttpApi
           Properties:
             Path: /rss_feed/{id}
-            Method: GET
+            Method: DELETE
             ApiId:
               Ref: DefaultAPI
       Role:
@@ -65,7 +65,7 @@ Resources:
   PostRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/340cc022640bfc5e5091be21ac2d7ece
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/ea368272b1a75c4cd95ebc65a51a4209
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
