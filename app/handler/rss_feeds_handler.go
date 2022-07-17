@@ -22,8 +22,37 @@ func NewRSSFeedHandler(rssFeedRepository domain.RSSFeedRepository) domain.RSSFee
 }
 
 func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	ctx := context.Background()
+
+	rssFeeds, err := p.rssFeedRepository.GetRSSFeeds(ctx)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed to get rss feeds errors: %#v", err),
+		}, nil
+	}
+
+	resBody := rss_feeds_pb.BatchGetRSSFeedsResponse{
+		RssFeeds: make([]*rss_feeds_pb.RSSFeed, len(rssFeeds)),
+	}
+	for i, rssFeed := range rssFeeds {
+		resBody.RssFeeds[i] = &rss_feeds_pb.RSSFeed{
+			Id:  rssFeed.Id,
+			Url: rssFeed.Url,
+		}
+	}
+
+	resBodyStr, err := json.Marshal(resBody)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed json.Unmarshal() with errors: %#v", err),
+		}, nil
+	}
+
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
+		Body:       string(resBodyStr),
 	}, nil
 }
 

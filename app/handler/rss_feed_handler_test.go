@@ -2,9 +2,11 @@ package handler
 
 import (
 	"database/sql"
+	"encoding/json"
 	"portfolio-backend/domain"
 	mock_domain "portfolio-backend/domain/mock"
 	"portfolio-backend/infra/repository"
+	"reflect"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -18,7 +20,7 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 		request      events.APIGatewayProxyRequest
 		mockFn       func(mr *mock_domain.MockRSSFeedRepository)
 		statusCode   int
-		wantRssFeeds []rss_feeds_pb.RSSFeed
+		wantRssFeeds []*rss_feeds_pb.RSSFeed
 	}{
 		{
 			name: "get all rss feeds",
@@ -28,10 +30,28 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 				},
 			},
 			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
-				// NOTE: 先にrepositoryの実装をする
-				mr.EXPECT().GetRssFeeds(gomock.Any()).Return(gomock.Any(), nil)
+				mr.EXPECT().GetRSSFeeds(gomock.Any()).Return([]domain.RSSFeed{
+					{
+						Id:  "aaa",
+						Url: "http://example.com/1",
+					},
+					{
+						Id:  "bbb",
+						Url: "http://example.com/2",
+					},
+				}, nil)
 			},
 			statusCode: 200,
+			wantRssFeeds: []*rss_feeds_pb.RSSFeed{
+				{
+					Id:  "aaa",
+					Url: "http://example.com/1",
+				},
+				{
+					Id:  "bbb",
+					Url: "http://example.com/2",
+				},
+			},
 		},
 	}
 
@@ -49,6 +69,16 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 
 			if res.StatusCode != test.statusCode {
 				t.Fatalf("bad status code by RSSFeedHandler.GetRSSFeeds(). got: %d, want: %d", res.StatusCode, test.statusCode)
+			}
+
+			var resBody rss_feeds_pb.BatchGetRSSFeedsResponse
+			err = json.Unmarshal([]byte(res.Body), &resBody)
+			if err != nil {
+				t.Fatalf("failed to unmarshal response body. %v", err)
+			}
+
+			if !reflect.DeepEqual(resBody.RssFeeds, test.wantRssFeeds) {
+				t.Fatalf("bad response body. got: %v, want: %v", resBody.RssFeeds, test.wantRssFeeds)
 			}
 		})
 	}
