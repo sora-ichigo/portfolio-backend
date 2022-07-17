@@ -55,8 +55,28 @@ Resources:
             Method: GET
             ApiId: !Ref DefaultAPI
       Role: !GetAtt LambdaExecutionRole.Arn
-  # GET:/rss_feeds ===============================================
+  # GET:/rss_feeds ==============================================
  
+  # GET:/rss_feed/{id} ==========================================
+  GetRSSFeeds:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/get_rss_feed
+      Handler: get_rss_feed
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /rss_feed/{id}
+            Method: GET
+            ApiId: !Ref DefaultAPI
+      Role: !GetAtt LambdaExecutionRole.Arn
+  # GET:/rss_feed/{id} ===========================================
+
   # POST:/rss_feeds ==============================================
   PostRSSFeeds:
     Type: AWS::Serverless::Function
