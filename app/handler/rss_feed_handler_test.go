@@ -199,6 +199,20 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 			mockFn:     func(mr *mock_domain.MockRSSFeedRepository) {},
 			statusCode: 400,
 		},
+		{
+			name: "already exists url",
+			url:  "http://example.com",
+			request: events.APIGatewayProxyRequest{
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+				Body: `{ "url": "http://example.com" }`,
+			},
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				mr.EXPECT().IsExistsUrl(gomock.Any(), "http://example.com").Return(true, nil)
+			},
+			statusCode: 400,
+		},
 	}
 
 	for _, test := range tests {
