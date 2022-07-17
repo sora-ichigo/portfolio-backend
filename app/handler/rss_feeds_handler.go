@@ -23,7 +23,7 @@ func NewRSSFeedHandler(rssFeedRepository domain.RSSFeedRepository) domain.RSSFee
 	}
 }
 
-func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (p rssFeedHandlerImpl) BatchGetRSSFeeds(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	ctx := context.Background()
 
 	rssFeeds, err := p.rssFeedRepository.GetRSSFeeds(ctx)
@@ -31,7 +31,7 @@ func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed to get rss feeds errors: %#v", err),
-		}, nil
+		}, err
 	}
 
 	resBody := rss_feeds_pb.BatchGetRSSFeedsResponse{
@@ -49,7 +49,7 @@ func (p rssFeedHandlerImpl) GetRSSFeeds(request events.APIGatewayProxyRequest) (
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed json.Unmarshal() with errors: %#v", err),
-		}, nil
+		}, err
 	}
 
 	return events.APIGatewayProxyResponse{
@@ -75,7 +75,7 @@ func (p rssFeedHandlerImpl) GetRSSFeed(request events.APIGatewayProxyRequest) (e
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed to get rss feeds errors: %#v", err),
-		}, nil
+		}, err
 	}
 
 	resBody := rss_feeds_pb.GetRSSFeedResponse{
@@ -89,7 +89,7 @@ func (p rssFeedHandlerImpl) GetRSSFeed(request events.APIGatewayProxyRequest) (e
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed json.Unmarshal() with errors: %#v", err),
-		}, nil
+		}, err
 	}
 
 	return events.APIGatewayProxyResponse{
@@ -108,7 +108,7 @@ func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest)
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed json.Unmarshal() with errors: %#v", err),
-		}, nil
+		}, err
 	}
 
 	if params.GetUrl() == "" {
@@ -125,7 +125,7 @@ func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest)
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed to check whether exists url in rss_feeds table. with errors: %#v", err),
-		}, nil
+		}, err
 	}
 
 	if exists {
@@ -142,7 +142,7 @@ func (p rssFeedHandlerImpl) CreateRSSFeed(request events.APIGatewayProxyRequest)
 		return events.APIGatewayProxyResponse{
 			StatusCode: 500,
 			Body:       fmt.Sprintf("failed create rss feed with errors: %#v", err),
-		}, nil
+		}, err
 	}
 
 	return events.APIGatewayProxyResponse{

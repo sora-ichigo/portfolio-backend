@@ -61,7 +61,7 @@ func TestGetRSSFeedsHeandler(t *testing.T) {
 			h, mr := setup(t, mockCtrl)
 			test.mockFn(mr)
 
-			res, err := h.GetRSSFeeds(test.request)
+			res, err := h.BatchGetRSSFeeds(test.request)
 			if err != nil {
 				t.Fatalf("failed to RSSFeedHandler.GetRSSFeeds(). %v", err)
 			}
@@ -197,6 +197,20 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 				Body: "{}",
 			},
 			mockFn:     func(mr *mock_domain.MockRSSFeedRepository) {},
+			statusCode: 400,
+		},
+		{
+			name: "already exists url",
+			url:  "http://example.com",
+			request: events.APIGatewayProxyRequest{
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+				Body: `{ "url": "http://example.com" }`,
+			},
+			mockFn: func(mr *mock_domain.MockRSSFeedRepository) {
+				mr.EXPECT().IsExistsUrl(gomock.Any(), "http://example.com").Return(true, nil)
+			},
 			statusCode: 400,
 		},
 	}
