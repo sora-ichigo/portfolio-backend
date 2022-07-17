@@ -1,11 +1,9 @@
 package handler
 
 import (
-	"database/sql"
 	"encoding/json"
 	"portfolio-backend/domain"
 	mock_domain "portfolio-backend/domain/mock"
-	"portfolio-backend/infra/repository"
 	"reflect"
 	"testing"
 
@@ -142,23 +140,6 @@ func TestPostRSSFeedsHeandler(t *testing.T) {
 
 func setup(t *testing.T, mockCtrl *gomock.Controller) (domain.RSSFeedHandler, *mock_domain.MockRSSFeedRepository) {
 	t.Helper()
-
-	db, err := repository.NewDB()
-	if err != nil {
-		t.Fatalf("failed to repository.NewDB(). %v", err)
-	}
-
-	deleteAllRssFeeds(t, db)
-
 	mockRSSFeedRepository := mock_domain.NewMockRSSFeedRepository(mockCtrl)
-
 	return NewRSSFeedHandler(mockRSSFeedRepository), mockRSSFeedRepository
-}
-
-func deleteAllRssFeeds(t *testing.T, db *sql.DB) {
-	t.Helper()
-
-	if _, err := db.Exec("DELETE FROM rss_feeds"); err != nil {
-		t.Fatal(err)
-	}
 }
