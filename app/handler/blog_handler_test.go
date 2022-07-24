@@ -2,13 +2,17 @@ package handler
 
 import (
 	"encoding/json"
+	"portfolio-backend/domain"
 	mock_domain "portfolio-backend/domain/mock"
 	"testing"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"
 	blogs_pb "github.com/igsr5/portfolio-proto/go/lib/blogs"
+	"google.golang.org/protobuf/testing/protocmp"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func TestBatchGetBlogs(t *testing.T) {
@@ -28,9 +32,44 @@ func TestBatchGetBlogs(t *testing.T) {
 				},
 			},
 			mockFn: func(mr *mock_domain.MockBlogRepository) {
+				mr.EXPECT().GetBlogs(gomock.Any()).Return([]*domain.Blog{
+					{
+						Id:           "aaa",
+						Title:        "Hello World",
+						PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+						SiteUrl:      "https://example.com",
+						ThumbnailUrl: "https://example.com/thumbnail.png",
+						ServiceName:  "Qiita",
+					},
+					{
+						Id:           "bbb",
+						Title:        "Hello World",
+						PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+						SiteUrl:      "https://example.com",
+						ThumbnailUrl: "https://example.com/thumbnail.png",
+						ServiceName:  "Qiita",
+					},
+				}, nil)
 			},
 			wantStatusCode: 200,
-			wantBlogs:      []*blogs_pb.Blog{},
+			wantBlogs: []*blogs_pb.Blog{
+				{
+					Id:           "aaa",
+					Title:        "Hello World",
+					PostedAt:     timestamppb.New(time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local)),
+					SiteUrl:      "https://example.com",
+					ThumbnailUrl: "https://example.com/thumbnail.png",
+					ServiceName:  "Qiita",
+				},
+				{
+					Id:           "bbb",
+					Title:        "Hello World",
+					PostedAt:     timestamppb.New(time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local)),
+					SiteUrl:      "https://example.com",
+					ThumbnailUrl: "https://example.com/thumbnail.png",
+					ServiceName:  "Qiita",
+				},
+			},
 		},
 	}
 
@@ -58,7 +97,7 @@ func TestBatchGetBlogs(t *testing.T) {
 				t.Fatalf("failed to unmarshal response body. %v", err)
 			}
 
-			if cmp.Equal(resBody.Blogs, tt.wantBlogs) {
+			if !cmp.Equal(resBody.Blogs, tt.wantBlogs, protocmp.Transform()) {
 				t.Fatalf("bad blogs. diff: %v", cmp.Diff(resBody.Blogs, tt.wantBlogs))
 			}
 		})

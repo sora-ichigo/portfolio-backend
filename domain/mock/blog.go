@@ -37,10 +37,10 @@ func (m *MockBlogRepository) EXPECT() *MockBlogRepositoryMockRecorder {
 }
 
 // GetBlogs mocks base method.
-func (m *MockBlogRepository) GetBlogs(arg0 context.Context) ([]domain.Blog, error) {
+func (m *MockBlogRepository) GetBlogs(arg0 context.Context) ([]*domain.Blog, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBlogs", arg0)
-	ret0, _ := ret[0].([]domain.Blog)
+	ret0, _ := ret[0].([]*domain.Blog)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

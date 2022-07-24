@@ -18,7 +18,7 @@ func NewBlogRepository(db *sql.DB) domain.BlogRepository {
 	return &blogRepositoryImpl{db: db}
 }
 
-func (b *blogRepositoryImpl) GetBlogs(ctx context.Context) ([]domain.Blog, error) {
+func (b *blogRepositoryImpl) GetBlogs(ctx context.Context) ([]*domain.Blog, error) {
 	mblog, err := models.BlogFromManualItems().All(ctx, b.db)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to get BlogFromManualItems")
@@ -29,9 +29,9 @@ func (b *blogRepositoryImpl) GetBlogs(ctx context.Context) ([]domain.Blog, error
 		return nil, errors.Wrap(err, "failed to get BlogFromRSSItems")
 	}
 
-	blogs := make([]domain.Blog, 0, len(mblog)+len(rblog))
+	blogs := make([]*domain.Blog, 0, len(mblog)+len(rblog))
 	for _, m := range mblog {
-		blogs = append(blogs, domain.Blog{
+		blogs = append(blogs, &domain.Blog{
 			Id:           m.ID,
 			Title:        m.Title,
 			PostedAt:     m.PostedAt.Time,
@@ -41,7 +41,7 @@ func (b *blogRepositoryImpl) GetBlogs(ctx context.Context) ([]domain.Blog, error
 		})
 	}
 	for _, r := range rblog {
-		blogs = append(blogs, domain.Blog{
+		blogs = append(blogs, &domain.Blog{
 			Id:           r.ID,
 			Title:        r.Title,
 			PostedAt:     r.PostedAt.Time,

@@ -8,4 +8,5 @@ import (
 
 var HandlerSet = wire.NewSet(
 	handler.NewRSSFeedHandler,
+	handler.NewBlogHandler,
 )
