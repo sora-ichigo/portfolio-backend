@@ -65,6 +65,98 @@ func TestGetBlogs(t *testing.T) {
 	}
 }
 
+func TestGetBlog(t *testing.T) {
+	tests := []struct {
+		name        string
+		existsBlogs []*domain.Blog
+		id          string
+		want        *domain.Blog
+	}{
+		{
+			name: "get blog from manual item",
+			existsBlogs: []*domain.Blog{
+				{
+					Id:           "aaa",
+					Title:        "Hello World",
+					PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+					SiteUrl:      "https://example.com",
+					ThumbnailUrl: "https://example.com/thumbnail.png",
+					ServiceName:  "Qiita",
+				},
+				{
+					Id:           "bbb",
+					Title:        "Hello World",
+					PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+					SiteUrl:      "https://example.com",
+					ThumbnailUrl: "https://example.com/thumbnail.png",
+					ServiceName:  "Qiita",
+				},
+			},
+			id: "aaa",
+			want: &domain.Blog{
+				Id:           "aaa",
+				Title:        "Hello World",
+				PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+				SiteUrl:      "https://example.com",
+				ThumbnailUrl: "https://example.com/thumbnail.png",
+				ServiceName:  "Qiita",
+			},
+		},
+		{
+			name: "get blog from rss item",
+			existsBlogs: []*domain.Blog{
+				{
+					Id:           "aaa",
+					Title:        "Hello World",
+					PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+					SiteUrl:      "https://example.com",
+					ThumbnailUrl: "https://example.com/thumbnail.png",
+					ServiceName:  "Qiita",
+				},
+				{
+					Id:           "bbb",
+					Title:        "Hello World",
+					PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+					SiteUrl:      "https://example.com",
+					ThumbnailUrl: "https://example.com/thumbnail.png",
+					ServiceName:  "Qiita",
+				},
+			},
+			id: "bbb",
+			want: &domain.Blog{
+				Id:           "bbb",
+				Title:        "Hello World",
+				PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
+				SiteUrl:      "https://example.com",
+				ThumbnailUrl: "https://example.com/thumbnail.png",
+				ServiceName:  "Qiita",
+			},
+		},
+	}
+
+	db, err := NewDB()
+	if err != nil {
+		t.Fatalf("failed to NewDB. err: %v", err)
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			deleteAllBlogs(t, db)
+			bulkInsertBlogs(t, db, tt.existsBlogs)
+
+			r := NewBlogRepository(db)
+
+			getBlog, err := r.GetBlog(context.Background(), tt.id)
+			if err != nil {
+				t.Fatalf("failed to GetBlog. %v", err)
+			}
+
+			if !cmp.Equal(tt.want, getBlog) {
+				t.Fatalf("bad blog. %s", cmp.Diff(tt.want, getBlog))
+			}
+		})
+	}
+}
 func bulkInsertBlogs(t *testing.T, db *sql.DB, blogs []*domain.Blog) {
 	t.Helper()
 	for i, b := range blogs {

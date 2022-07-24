@@ -36,19 +36,34 @@ func (m *MockBlogRepository) EXPECT() *MockBlogRepositoryMockRecorder {
 	return m.recorder
 }
 
-// GetBlogs mocks base method.
-func (m *MockBlogRepository) GetBlogs(arg0 context.Context) ([]*domain.Blog, error) {
+// GetBlog mocks base method.
+func (m *MockBlogRepository) GetBlog(ctx context.Context, id string) (*domain.Blog, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetBlogs", arg0)
+	ret := m.ctrl.Call(m, "GetBlog", ctx, id)
+	ret0, _ := ret[0].(*domain.Blog)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBlog indicates an expected call of GetBlog.
+func (mr *MockBlogRepositoryMockRecorder) GetBlog(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBlog", reflect.TypeOf((*MockBlogRepository)(nil).GetBlog), ctx, id)
+}
+
+// GetBlogs mocks base method.
+func (m *MockBlogRepository) GetBlogs(ctx context.Context) ([]*domain.Blog, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBlogs", ctx)
 	ret0, _ := ret[0].([]*domain.Blog)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetBlogs indicates an expected call of GetBlogs.
-func (mr *MockBlogRepositoryMockRecorder) GetBlogs(arg0 interface{}) *gomock.Call {
+func (mr *MockBlogRepositoryMockRecorder) GetBlogs(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBlogs", reflect.TypeOf((*MockBlogRepository)(nil).GetBlogs), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBlogs", reflect.TypeOf((*MockBlogRepository)(nil).GetBlogs), ctx)
 }
 
 // MockBlogHandler is a mock of BlogHandler interface.

@@ -17,7 +17,8 @@ type Blog struct {
 }
 
 type BlogRepository interface {
-	GetBlogs(context.Context) ([]*Blog, error)
+	GetBlogs(ctx context.Context) ([]*Blog, error)
+	GetBlog(ctx context.Context, id string) (*Blog, error)
 }
 
 type BlogHandler interface {

@@ -57,3 +57,35 @@ func (b *blogRepositoryImpl) GetBlogs(ctx context.Context) ([]*domain.Blog, erro
 
 	return blogs, nil
 }
+
+func (b *blogRepositoryImpl) GetBlog(ctx context.Context, id string) (*domain.Blog, error) {
+	mblog, err := models.BlogFromManualItems(models.BlogFromManualItemWhere.ID.EQ(id)).One(ctx, b.db)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, errors.Wrap(err, "failed to get BlogFromManualItems")
+	} else if err == sql.ErrNoRows {
+		// noop
+	} else {
+		return &domain.Blog{
+			Id:           mblog.ID,
+			Title:        mblog.Title,
+			PostedAt:     mblog.PostedAt.Time,
+			SiteUrl:      mblog.SiteURL,
+			ThumbnailUrl: mblog.ThumbnailURL,
+			ServiceName:  mblog.ServiceName,
+		}, nil
+	}
+
+	rblog, err := models.BlogFromRSSItems(models.BlogFromRSSItemWhere.ID.EQ(id)).One(ctx, b.db)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get BlogFromManualItems")
+	}
+
+	return &domain.Blog{
+		Id:           rblog.ID,
+		Title:        rblog.Title,
+		PostedAt:     rblog.PostedAt.Time,
+		SiteUrl:      rblog.SiteURL,
+		ThumbnailUrl: rblog.ThumbnailURL,
+		ServiceName:  rblog.ServiceName,
+	}, nil
+}
