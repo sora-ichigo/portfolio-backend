@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -23,37 +24,44 @@ import (
 
 // RSSFeed is an object representing the database table.
 type RSSFeed struct {
-	ID  string `boil:"id" json:"id" toml:"id" yaml:"id"`
-	URL string `boil:"url" json:"url" toml:"url" yaml:"url"`
+	ID        string    `boil:"id" json:"id" toml:"id" yaml:"id"`
+	URL       string    `boil:"url" json:"url" toml:"url" yaml:"url"`
+	CreatedAt null.Time `boil:"created_at" json:"created_at,omitempty" toml:"created_at" yaml:"created_at,omitempty"`
 
 	R *rssFeedR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L rssFeedL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var RSSFeedColumns = struct {
-	ID  string
-	URL string
+	ID        string
+	URL       string
+	CreatedAt string
 }{
-	ID:  "id",
-	URL: "url",
+	ID:        "id",
+	URL:       "url",
+	CreatedAt: "created_at",
 }
 
 var RSSFeedTableColumns = struct {
-	ID  string
-	URL string
+	ID        string
+	URL       string
+	CreatedAt string
 }{
-	ID:  "rss_feeds.id",
-	URL: "rss_feeds.url",
+	ID:        "rss_feeds.id",
+	URL:       "rss_feeds.url",
+	CreatedAt: "rss_feeds.created_at",
 }
 
 // Generated where
 
 var RSSFeedWhere = struct {
-	ID  whereHelperstring
-	URL whereHelperstring
+	ID        whereHelperstring
+	URL       whereHelperstring
+	CreatedAt whereHelpernull_Time
 }{
-	ID:  whereHelperstring{field: "`rss_feeds`.`id`"},
-	URL: whereHelperstring{field: "`rss_feeds`.`url`"},
+	ID:        whereHelperstring{field: "`rss_feeds`.`id`"},
+	URL:       whereHelperstring{field: "`rss_feeds`.`url`"},
+	CreatedAt: whereHelpernull_Time{field: "`rss_feeds`.`created_at`"},
 }
 
 // RSSFeedRels is where relationship names are stored.
@@ -73,8 +81,8 @@ func (*rssFeedR) NewStruct() *rssFeedR {
 type rssFeedL struct{}
 
 var (
-	rssFeedAllColumns            = []string{"id", "url"}
-	rssFeedColumnsWithoutDefault = []string{"id", "url"}
+	rssFeedAllColumns            = []string{"id", "url", "created_at"}
+	rssFeedColumnsWithoutDefault = []string{"id", "url", "created_at"}
 	rssFeedColumnsWithDefault    = []string{}
 	rssFeedPrimaryKeyColumns     = []string{"id"}
 )
@@ -428,6 +436,13 @@ func (o *RSSFeed) Insert(ctx context.Context, exec boil.ContextExecutor, columns
 	}
 
 	var err error
+	if !boil.TimestampsAreSkipped(ctx) {
+		currTime := time.Now().In(boil.GetLocation())
+
+		if queries.MustTime(o.CreatedAt).IsZero() {
+			queries.SetScanner(&o.CreatedAt, currTime)
+		}
+	}
 
 	if err := o.doBeforeInsertHooks(ctx, exec); err != nil {
 		return err
@@ -674,6 +689,13 @@ var mySQLRSSFeedUniqueColumns = []string{
 func (o *RSSFeed) Upsert(ctx context.Context, exec boil.ContextExecutor, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
 		return errors.New("models: no rss_feeds provided for upsert")
+	}
+	if !boil.TimestampsAreSkipped(ctx) {
+		currTime := time.Now().In(boil.GetLocation())
+
+		if queries.MustTime(o.CreatedAt).IsZero() {
+			queries.SetScanner(&o.CreatedAt, currTime)
+		}
 	}
 
 	if err := o.doBeforeUpsertHooks(ctx, exec); err != nil {

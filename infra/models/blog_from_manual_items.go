@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -25,7 +26,7 @@ import (
 type BlogFromManualItem struct {
 	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Title        string    `boil:"title" json:"title" toml:"title" yaml:"title"`
-	PostedAt     time.Time `boil:"posted_at" json:"posted_at" toml:"posted_at" yaml:"posted_at"`
+	PostedAt     null.Time `boil:"posted_at" json:"posted_at,omitempty" toml:"posted_at" yaml:"posted_at,omitempty"`
 	SiteURL      string    `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
 	ThumbnailURL string    `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
 	ServiceName  string    `boil:"service_name" json:"service_name" toml:"service_name" yaml:"service_name"`
@@ -91,38 +92,40 @@ func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
 	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
 }
 
-type whereHelpertime_Time struct{ field string }
+type whereHelpernull_Time struct{ field string }
 
-func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.EQ, x)
+func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
 }
-func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.NEQ, x)
+func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
 }
-func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
+func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LT, x)
 }
-func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
+func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LTE, x)
 }
-func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
+func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GT, x)
 }
-func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
+func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GTE, x)
 }
 
 var BlogFromManualItemWhere = struct {
 	ID           whereHelperstring
 	Title        whereHelperstring
-	PostedAt     whereHelpertime_Time
+	PostedAt     whereHelpernull_Time
 	SiteURL      whereHelperstring
 	ThumbnailURL whereHelperstring
 	ServiceName  whereHelperstring
 }{
 	ID:           whereHelperstring{field: "`blog_from_manual_items`.`id`"},
 	Title:        whereHelperstring{field: "`blog_from_manual_items`.`title`"},
-	PostedAt:     whereHelpertime_Time{field: "`blog_from_manual_items`.`posted_at`"},
+	PostedAt:     whereHelpernull_Time{field: "`blog_from_manual_items`.`posted_at`"},
 	SiteURL:      whereHelperstring{field: "`blog_from_manual_items`.`site_url`"},
 	ThumbnailURL: whereHelperstring{field: "`blog_from_manual_items`.`thumbnail_url`"},
 	ServiceName:  whereHelperstring{field: "`blog_from_manual_items`.`service_name`"},
