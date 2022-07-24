@@ -17,5 +17,6 @@ func NewBlogHandler(blogRepository domain.BlogRepository) domain.BlogHandler {
 func (b *blogHandlerImpl) BatchGetBlogs(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
+		Body:       "{}",
 	}, nil
 }
