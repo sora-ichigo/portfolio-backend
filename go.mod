@@ -10,7 +10,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/mock v1.6.0
 	github.com/google/wire v0.5.0
-	github.com/igsr5/portfolio-proto/go v0.0.0-20220717123650-d5febd18edd8
+	github.com/igsr5/portfolio-proto/go v0.0.0-20220724150137-6aff92a964ca
 	github.com/lithammer/shortuuid/v3 v3.0.7
 	github.com/pkg/errors v0.9.1
 	github.com/volatiletech/null/v8 v8.1.2

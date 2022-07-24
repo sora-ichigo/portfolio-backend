@@ -3,6 +3,8 @@ package domain
 import (
 	"context"
 	"time"
+
+	"github.com/aws/aws-lambda-go/events"
 )
 
 type Blog struct {
@@ -19,4 +21,5 @@ type BlogRepository interface {
 }
 
 type BlogHandler interface {
+	BatchGetBlogs(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 }
