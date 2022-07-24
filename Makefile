@@ -18,7 +18,7 @@ package: sam-build
 
 # migrate
 DB_DRIVER=mysql://
-DSN=root:root@tcp(localhost:3306)/portfolio
+DSN=root:root@tcp(localhost:3306)/portfolio?parseTime=true
 STEP=1
 
 .PHONY: migrate-create

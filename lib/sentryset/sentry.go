@@ -12,13 +12,21 @@ import (
 func init() {
 	dsn := os.Getenv("SENTRY_DSN")
 	appEnv := os.Getenv("APP_ENV")
+	if appEnv == "" {
+		log.Println("APP_ENV is not set")
+	} else if dsn == "" {
+		log.Fatalf("SENTRY_DSN is not set")
+	}
 	err := sentry.Init(sentry.ClientOptions{
-		Environment: appEnv,
-		Dsn:         dsn,
+		Environment:      appEnv,
+		Dsn:              dsn,
+		TracesSampleRate: 1.0,
 	})
 	if err != nil {
 		log.Printf("sentry.Init: %v", err)
 	}
+
+	sentry.CaptureMessage("sentry.Init success!")
 }
 
 func CleanUp() {

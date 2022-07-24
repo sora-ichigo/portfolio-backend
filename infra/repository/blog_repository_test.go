@@ -16,11 +16,11 @@ import (
 func TestGetBlogs(t *testing.T) {
 	tests := []struct {
 		name        string
-		existsBlogs []domain.Blog
+		existsBlogs []*domain.Blog
 	}{
 		{
 			name: "get all blogs",
-			existsBlogs: []domain.Blog{
+			existsBlogs: []*domain.Blog{
 				{
 					Id:           "aaa",
 					Title:        "Hello World",
@@ -65,7 +65,7 @@ func TestGetBlogs(t *testing.T) {
 	}
 }
 
-func bulkInsertBlogs(t *testing.T, db *sql.DB, blogs []domain.Blog) {
+func bulkInsertBlogs(t *testing.T, db *sql.DB, blogs []*domain.Blog) {
 	t.Helper()
 	for i, b := range blogs {
 		if i%2 == 0 {
