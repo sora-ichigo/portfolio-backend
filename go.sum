@@ -737,10 +737,10 @@ github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpO
 github.com/iancoleman/strcase v0.2.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
-github.com/igsr5/portfolio-proto/go v0.0.0-20220717123650-d5febd18edd8 h1:ZZAclqcuIIDJIplmeHTHYj5ioJHErOEDaTFUV+D+Rzg=
-github.com/igsr5/portfolio-proto/go v0.0.0-20220717123650-d5febd18edd8/go.mod h1:+peDjNz/OiZko1k8fzQ/V1FSViS81MVwDpURivtxjn8=
 github.com/igsr5/portfolio-proto/go v0.0.0-20220724150137-6aff92a964ca h1:e15zQDNNR/xK+BFxbwT6m5ZUh0H/h6kGpAyJcYrPu3E=
 github.com/igsr5/portfolio-proto/go v0.0.0-20220724150137-6aff92a964ca/go.mod h1:+peDjNz/OiZko1k8fzQ/V1FSViS81MVwDpURivtxjn8=
+github.com/igsr5/portfolio-proto/go v0.0.0-20220724195445-7a53b5393fe3 h1:hWo3WYRiMO+OWjaUhVIixUilChf0YrqKSk1oW+k3rjM=
+github.com/igsr5/portfolio-proto/go v0.0.0-20220724195445-7a53b5393fe3/go.mod h1:+peDjNz/OiZko1k8fzQ/V1FSViS81MVwDpURivtxjn8=
 github.com/imdario/mergo v0.3.5/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/imdario/mergo v0.3.8/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/imdario/mergo v0.3.10/go.mod h1:jmQim1M+e3UYxmgPu/WyfjB3N3VflVyUjjjwH0dnCYA=
@@ -1945,7 +1945,6 @@ gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b/go.mod h1:K4uyk7z7BCEPqu6E+C
 gorm.io/driver/postgres v1.0.8/go.mod h1:4eOzrI1MUfm6ObJU/UcmbXyiHSs8jSwH95G5P5dxcAg=
 gorm.io/gorm v1.20.12/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
 gorm.io/gorm v1.21.4/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
-gotest.tools v2.2.0+incompatible h1:VsBPFP1AI068pPrMxtb/S8Zkgf9xEmTLJjfM+P5UIEo=
 gotest.tools v2.2.0+incompatible/go.mod h1:DsYFclhRJ6vuDpmuTbkuFWG+y2sxOXAzmJt81HFBacw=
 gotest.tools/v3 v3.0.2/go.mod h1:3SzNCllyD9/Y+b5r9JIKQ474KzkZyqLqEfYqMsX94Bk=
 gotest.tools/v3 v3.0.3/go.mod h1:Z7Lb0S5l+klDB31fvDQX8ss/FlKDxtlFlw3Oa8Ymbl8=

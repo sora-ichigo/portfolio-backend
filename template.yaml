@@ -136,6 +136,27 @@ Resources:
             ApiId: !Ref DefaultAPI
       Role: !GetAtt LambdaExecutionRole.Arn
   # GET:/blogs ===============================================
+  
+  # GET:/blogs/{id} ==========================================
+  GetBlog:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/get_blog
+      Handler: get_blog
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /blogs/{id}
+            Method: GET
+            ApiId: !Ref DefaultAPI
+      Role: !GetAtt LambdaExecutionRole.Arn
+  # GET:/blogs ===============================================
+
 
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function

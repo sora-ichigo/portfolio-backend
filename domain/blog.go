@@ -23,4 +23,5 @@ type BlogRepository interface {
 
 type BlogHandler interface {
 	BatchGetBlogs(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
+	GetBlog(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 }

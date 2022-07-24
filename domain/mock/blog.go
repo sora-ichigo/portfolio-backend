@@ -103,3 +103,18 @@ func (mr *MockBlogHandlerMockRecorder) BatchGetBlogs(request interface{}) *gomoc
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchGetBlogs", reflect.TypeOf((*MockBlogHandler)(nil).BatchGetBlogs), request)
 }
+
+// GetBlog mocks base method.
+func (m *MockBlogHandler) GetBlog(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBlog", request)
+	ret0, _ := ret[0].(events.APIGatewayProxyResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBlog indicates an expected call of GetBlog.
+func (mr *MockBlogHandlerMockRecorder) GetBlog(request interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBlog", reflect.TypeOf((*MockBlogHandler)(nil).GetBlog), request)
+}

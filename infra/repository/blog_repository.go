@@ -62,7 +62,7 @@ func (b *blogRepositoryImpl) GetBlog(ctx context.Context, id string) (*domain.Bl
 	mblog, err := models.BlogFromManualItems(models.BlogFromManualItemWhere.ID.EQ(id)).One(ctx, b.db)
 	if err != nil && err != sql.ErrNoRows {
 		return nil, errors.Wrap(err, "failed to get BlogFromManualItems")
-	} else if err == sql.ErrNoRows {
+	} else if errors.Is(err, sql.ErrNoRows) {
 		// noop
 	} else {
 		return &domain.Blog{
