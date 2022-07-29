@@ -11,6 +11,7 @@ import (
 
 	events "github.com/aws/aws-lambda-go/events"
 	gomock "github.com/golang/mock/gomock"
+	blogs_pb "github.com/igsr5/portfolio-proto/go/lib/blogs"
 )
 
 // MockBlogRepository is a mock of BlogRepository interface.
@@ -34,6 +35,20 @@ func NewMockBlogRepository(ctrl *gomock.Controller) *MockBlogRepository {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockBlogRepository) EXPECT() *MockBlogRepositoryMockRecorder {
 	return m.recorder
+}
+
+// CreateBlogFromManualItem mocks base method.
+func (m *MockBlogRepository) CreateBlogFromManualItem(ctx context.Context, input blogs_pb.CreateBlogRequest) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateBlogFromManualItem", ctx, input)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateBlogFromManualItem indicates an expected call of CreateBlogFromManualItem.
+func (mr *MockBlogRepositoryMockRecorder) CreateBlogFromManualItem(ctx, input interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateBlogFromManualItem", reflect.TypeOf((*MockBlogRepository)(nil).CreateBlogFromManualItem), ctx, input)
 }
 
 // GetBlog mocks base method.

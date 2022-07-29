@@ -7,7 +7,11 @@ import (
 	"portfolio-backend/infra/models"
 	"sort"
 
+	"github.com/gofrs/uuid"
+	blogs_pb "github.com/igsr5/portfolio-proto/go/lib/blogs"
 	"github.com/pkg/errors"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 type blogRepositoryImpl struct {
@@ -88,4 +92,47 @@ func (b *blogRepositoryImpl) GetBlog(ctx context.Context, id string) (*domain.Bl
 		ThumbnailUrl: rblog.ThumbnailURL,
 		ServiceName:  rblog.ServiceName,
 	}, nil
+}
+
+func (b *blogRepositoryImpl) CreateBlogFromManualItem(ctx context.Context, input blogs_pb.CreateBlogRequest) error {
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		return errors.Wrap(err, "failed to create uuid")
+	}
+
+	if input.Title == "" {
+		return errors.New("title is required")
+	}
+
+	if input.PostedAt == nil {
+		return errors.New("posted at is required")
+	}
+
+	if input.SiteUrl == "" {
+		return errors.New("site url is required")
+	}
+
+	if input.ThumbnailUrl == "" {
+		return errors.New("thumbnail url is required")
+	}
+
+	if input.ServiceName == "" {
+		return errors.New("service name is required")
+	}
+
+	mblog := models.BlogFromManualItem{
+		ID:           uuid.String(),
+		Title:        input.GetTitle(),
+		PostedAt:     null.TimeFrom(input.GetPostedAt().AsTime()),
+		SiteURL:      input.GetSiteUrl(),
+		ThumbnailURL: input.GetThumbnailUrl(),
+		ServiceName:  input.GetServiceName(),
+	}
+
+	err = mblog.Insert(ctx, b.db, boil.Infer())
+	if err != nil {
+		return errors.Wrap(err, "failed to insert BlogFromManualItem")
+	}
+
+	return nil
 }

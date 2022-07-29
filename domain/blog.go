@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
+	blogs_pb "github.com/igsr5/portfolio-proto/go/lib/blogs"
 )
 
 type Blog struct {
@@ -19,6 +20,7 @@ type Blog struct {
 type BlogRepository interface {
 	GetBlogs(ctx context.Context) ([]*Blog, error)
 	GetBlog(ctx context.Context, id string) (*Blog, error)
+	CreateBlogFromManualItem(ctx context.Context, input blogs_pb.CreateBlogRequest) error
 }
 
 type BlogHandler interface {

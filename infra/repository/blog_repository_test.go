@@ -9,8 +9,10 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	blogs_pb "github.com/igsr5/portfolio-proto/go/lib/blogs"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func TestGetBlogs(t *testing.T) {
@@ -84,10 +86,9 @@ func TestGetBlog(t *testing.T) {
 					ServiceName:  "Qiita",
 				},
 				{
-					Id:           "bbb",
-					Title:        "Hello World",
-					PostedAt:     time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local),
-					SiteUrl:      "https://example.com",
+					Id:       "bbb",
+					Title:    "Hello World",
+					PostedAt: time.Date(2020, time.December, 10, 23, 1, 10, 0, time.Local), SiteUrl: "https://example.com",
 					ThumbnailUrl: "https://example.com/thumbnail.png",
 					ServiceName:  "Qiita",
 				},
@@ -157,6 +158,68 @@ func TestGetBlog(t *testing.T) {
 		})
 	}
 }
+
+func TestCreateBlogFromManualItem(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   blogs_pb.CreateBlogRequest
+		wantErr bool
+	}{
+		{
+			name:    "create blog from manual item",
+			input:   blogs_pb.CreateBlogRequest{Title: "Hello World", PostedAt: timestamppb.New(time.Now()), SiteUrl: "https://example.com", ThumbnailUrl: "https://example.com/thumbnail.png", ServiceName: "Qiita"},
+			wantErr: false,
+		},
+		{
+			name:    "title is required",
+			input:   blogs_pb.CreateBlogRequest{PostedAt: timestamppb.New(time.Now()), SiteUrl: "https://example.com", ThumbnailUrl: "https://example.com/thumbnail.png", ServiceName: "Qiita"},
+			wantErr: true,
+		},
+		{
+			name:    "posted at is required",
+			input:   blogs_pb.CreateBlogRequest{Title: "Hello World", SiteUrl: "https://example.com", ThumbnailUrl: "https://example.com/thumbnail.png", ServiceName: "Qiita"},
+			wantErr: true,
+		},
+		{
+			name:    "site url is required",
+			input:   blogs_pb.CreateBlogRequest{Title: "Hello World", PostedAt: timestamppb.New(time.Now()), ThumbnailUrl: "https://example.com/thumbnail.png", ServiceName: "Qiita"},
+			wantErr: true,
+		},
+		{
+			name:    "thumbnail url is required",
+			input:   blogs_pb.CreateBlogRequest{Title: "Hello World", PostedAt: timestamppb.New(time.Now()), SiteUrl: "https://example.com", ServiceName: "Qiita"},
+			wantErr: true,
+		},
+		{
+			name:    "service name is required",
+			input:   blogs_pb.CreateBlogRequest{Title: "Hello World", PostedAt: timestamppb.New(time.Now()), SiteUrl: "https://example.com", ThumbnailUrl: "https://example.com/thumbnail.png"},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db, err := NewDB()
+			if err != nil {
+				t.Fatalf("failed to NewDB. err: %v", err)
+			}
+
+			r := NewBlogRepository(db)
+
+			err = r.CreateBlogFromManualItem(context.Background(), tt.input)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatalf("want err, but not get err")
+				}
+			} else {
+				if err != nil {
+					t.Fatalf("failed to CreateBlogFromManualItem. %v", err)
+				}
+			}
+		})
+	}
+}
+
 func bulkInsertBlogs(t *testing.T, db *sql.DB, blogs []*domain.Blog) {
 	t.Helper()
 	for i, b := range blogs {
