@@ -158,11 +158,11 @@ Resources:
   # GET:/blogs/{id} ===========================================
 
   # POST:/blogs ===============================================
-  GetBlog:
+  CreateBlog:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: api/post_blog
-      Handler: post_blog
+      CodeUri: api/post_blogs
+      Handler: post_blogs
       Runtime: go1.x
       Architectures:
         - x86_64
