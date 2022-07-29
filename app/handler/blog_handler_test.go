@@ -198,3 +198,53 @@ func TestGetBlog(t *testing.T) {
 	}
 
 }
+
+func TestCreateBlog(t *testing.T) {
+	tests := []struct {
+		name       string
+		request    events.APIGatewayProxyRequest
+		mockFn     func(mb *mock_domain.MockBlogRepository)
+		statusCode int
+	}{
+		{
+			name: "create blog",
+			request: events.APIGatewayProxyRequest{
+				HTTPMethod: "POST",
+				Path:       "/blogs",
+				Body: `{
+          "title": "Hello World",
+          "site_url": "https://example.com",
+          "thumbnail_url": "https://example.com/thumbnail.png",
+          "service_name": "Qiita"
+        }`,
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+			},
+			mockFn: func(mb *mock_domain.MockBlogRepository) {
+				mb.EXPECT().CreateBlogFromManualItem(gomock.Any(), gomock.Any()).Return(nil)
+			},
+			statusCode: 200,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			defer mockCtrl.Finish()
+			mbr := mock_domain.NewMockBlogRepository(mockCtrl)
+			tt.mockFn(mbr)
+
+			h := NewBlogHandler(mbr)
+
+			res, err := h.CreateBlog(tt.request)
+			if err != nil {
+				t.Fatalf("failed to CreateBlog. err: %v", err)
+			}
+
+			if res.StatusCode != tt.statusCode {
+				t.Fatalf("bad status code. got: %d, want %d", res.StatusCode, tt.statusCode)
+			}
+		})
+	}
+}

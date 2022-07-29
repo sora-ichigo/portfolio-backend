@@ -103,3 +103,29 @@ func (b *blogHandlerImpl) GetBlog(request events.APIGatewayProxyRequest) (events
 		Body:       string(resBodyStr),
 	}, nil
 }
+
+func (b *blogHandlerImpl) CreateBlog(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	ctx := context.Background()
+
+	blog := blogs_pb.CreateBlogRequest{}
+	err := json.Unmarshal([]byte(request.Body), &blog)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed to unmarshal request: %v", err),
+		}, err
+	}
+
+	err = b.blogRepository.CreateBlogFromManualItem(ctx, blog)
+	if err != nil {
+		// TODO: handling 400 error
+		return events.APIGatewayProxyResponse{
+			StatusCode: 500,
+			Body:       fmt.Sprintf("failed to create blog: %v", err),
+		}, err
+	}
+
+	return events.APIGatewayProxyResponse{
+		StatusCode: 200,
+	}, nil
+}
