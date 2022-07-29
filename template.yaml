@@ -58,7 +58,7 @@ Resources:
   # GET:/rss_feeds ==============================================
  
   # GET:/rss_feed/{id} ==========================================
-  GetRSSFeeds:
+  GetRSSFeed:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: api/get_rss_feed
@@ -71,14 +71,14 @@ Resources:
         CatchAll:
           Type: HttpApi
           Properties:
-            Path: /rss_feed/{id}
+            Path: /rss_feeds/{id}
             Method: GET
             ApiId: !Ref DefaultAPI
       Role: !GetAtt LambdaExecutionRole.Arn
   # GET:/rss_feed/{id} ===========================================
 
   # POST:/rss_feeds ==============================================
-  PostRSSFeeds:
+  PostRSSFeed:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: api/post_rss_feeds
@@ -98,7 +98,7 @@ Resources:
   # POST:/rss_feeds ==============================================
  
   # DELETE:/rss_feed/{id} ========================================
-  GetRSSFeeds:
+  DeleteRSSFeed:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: api/delete_rss_feed
@@ -111,11 +111,72 @@ Resources:
         CatchAll:
           Type: HttpApi
           Properties:
-            Path: /rss_feed/{id}
+            Path: /rss_feeds/{id}
             Method: DELETE
             ApiId: !Ref DefaultAPI
       Role: !GetAtt LambdaExecutionRole.Arn
   # DELETE:/rss_feed/{id} =========================================
+  
+  # GET:/blogs ===============================================
+  GetBlogs:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/get_blogs
+      Handler: get_blogs
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /blogs
+            Method: GET
+            ApiId: !Ref DefaultAPI
+      Role: !GetAtt LambdaExecutionRole.Arn
+  # GET:/blogs ===============================================
+  
+  # GET:/blogs/{id} ==========================================
+  GetBlog:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/get_blog
+      Handler: get_blog
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /blogs/{id}
+            Method: GET
+            ApiId: !Ref DefaultAPI
+      Role: !GetAtt LambdaExecutionRole.Arn
+  # GET:/blogs/{id} ===========================================
+
+  # POST:/blogs ===============================================
+  CreateBlog:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: api/post_blogs
+      Handler: post_blogs
+      Runtime: go1.x
+      Architectures:
+        - x86_64
+      Tracing: Active
+      Events:
+        CatchAll:
+          Type: HttpApi
+          Properties:
+            Path: /blogs
+            Method: POST
+            ApiId: !Ref DefaultAPI
+      Role: !GetAtt LambdaExecutionRole.Arn
+  # POST:/blogs ===============================================
+
 
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function

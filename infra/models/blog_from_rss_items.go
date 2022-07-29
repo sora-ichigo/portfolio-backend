@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -25,7 +26,7 @@ import (
 type BlogFromRSSItem struct {
 	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Title        string    `boil:"title" json:"title" toml:"title" yaml:"title"`
-	PostedAt     time.Time `boil:"posted_at" json:"posted_at" toml:"posted_at" yaml:"posted_at"`
+	PostedAt     null.Time `boil:"posted_at" json:"posted_at,omitempty" toml:"posted_at" yaml:"posted_at,omitempty"`
 	SiteURL      string    `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
 	ThumbnailURL string    `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
 	ServiceName  string    `boil:"service_name" json:"service_name" toml:"service_name" yaml:"service_name"`
@@ -71,14 +72,14 @@ var BlogFromRSSItemTableColumns = struct {
 var BlogFromRSSItemWhere = struct {
 	ID           whereHelperstring
 	Title        whereHelperstring
-	PostedAt     whereHelpertime_Time
+	PostedAt     whereHelpernull_Time
 	SiteURL      whereHelperstring
 	ThumbnailURL whereHelperstring
 	ServiceName  whereHelperstring
 }{
 	ID:           whereHelperstring{field: "`blog_from_rss_items`.`id`"},
 	Title:        whereHelperstring{field: "`blog_from_rss_items`.`title`"},
-	PostedAt:     whereHelpertime_Time{field: "`blog_from_rss_items`.`posted_at`"},
+	PostedAt:     whereHelpernull_Time{field: "`blog_from_rss_items`.`posted_at`"},
 	SiteURL:      whereHelperstring{field: "`blog_from_rss_items`.`site_url`"},
 	ThumbnailURL: whereHelperstring{field: "`blog_from_rss_items`.`thumbnail_url`"},
 	ServiceName:  whereHelperstring{field: "`blog_from_rss_items`.`service_name`"},

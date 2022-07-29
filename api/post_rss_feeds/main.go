@@ -1,12 +1,13 @@
 package main
 
 import (
-	"log"
 	"os"
 	"portfolio-backend/app/di"
 	"portfolio-backend/lib/sentryset"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/getsentry/sentry-go"
+	"github.com/pkg/errors"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 
 	app, err := di.NewApp()
 	if err != nil {
-		log.Fatalf("function failed with errors: %#v", err)
+		sentry.CaptureException(errors.Wrap(err, "failed to NewApp"))
 		os.Exit(1)
 	}
 

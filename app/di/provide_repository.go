@@ -9,4 +9,5 @@ import (
 var RepositorySet = wire.NewSet(
 	repository.NewDB,
 	repository.NewRSSFeedRepository,
+	repository.NewBlogRepository,
 )

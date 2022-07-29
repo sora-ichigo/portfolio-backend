@@ -19,5 +19,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	lambda.Start(sentryset.WithCatchErrInAPIGateway(app.RSSFeedHandler.BatchGetRSSFeeds))
+	lambda.Start(sentryset.WithCatchErrInAPIGateway(app.BlogHandler.GetBlog))
 }

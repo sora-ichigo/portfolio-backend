@@ -20,8 +20,11 @@ func NewApp() (*App, error) {
 	}
 	rssFeedRepository := repository.NewRSSFeedRepository(db)
 	rssFeedHandler := handler.NewRSSFeedHandler(rssFeedRepository)
+	blogRepository := repository.NewBlogRepository(db)
+	blogHandler := handler.NewBlogHandler(blogRepository)
 	app := &App{
 		RSSFeedHandler: rssFeedHandler,
+		BlogHandler:    blogHandler,
 	}
 	return app, nil
 }

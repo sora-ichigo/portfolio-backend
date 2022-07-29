@@ -5,6 +5,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: portfolio
+      TZ: Asia/Tokyo
     ports:
       - 3306:3306
     networks:
