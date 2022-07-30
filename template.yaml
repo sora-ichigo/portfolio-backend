@@ -188,7 +188,7 @@ Resources:
               UpdateBlogDataFromRSS:
                   Type: Schedule
                   Properties:
-                      Schedule: cron(* * * * ? *) 
+                      Schedule: rate(3 minutes)
       Environment:
         Variables:
           DSN: !Ref DSN
