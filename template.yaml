@@ -177,22 +177,24 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
   # POST:/blogs ===============================================
 
-
+  # Update Blog Data from rss job =============================
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
       Properties:
-          CodeUri: job
+          CodeUri: job/update_blog_data_from_rss
           Handler: update-blog-data-from-rss
           Runtime: go1.x
           Events:
               UpdateBlogDataFromRSS:
                   Type: Schedule
                   Properties:
-                      Schedule: cron(* * * * ? *) 
+                      Schedule: rate(3 minutes)
       Environment:
         Variables:
           DSN: !Ref DSN
       Role: !GetAtt LambdaExecutionRole.Arn
+  # Update Blog Data from rss job =============================
+  
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
     Properties:
