@@ -28,14 +28,14 @@ func TestHandler(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	r = models.RSSFeed{
-		ID:  uuid.New().String(),
-		URL: "https://qiita.com/igsr5/feed",
-	}
-	err = r.Insert(context.Background(), db, boil.Infer())
-	if err != nil {
-		t.Fatal(err)
-	}
+	// r = models.RSSFeed{
+	// 	ID:  uuid.New().String(),
+	// 	URL: "https://qiita.com/igsr5/feed",
+	// }
+	// err = r.Insert(context.Background(), db, boil.Infer())
+	// if err != nil {
+	// 	t.Fatal(err)
+	// }
 
 	r = models.RSSFeed{
 		ID:  uuid.New().String(),
@@ -71,11 +71,11 @@ func TestGetBlogDataFromRSS(t *testing.T) {
 			url:     "https://zenn.dev/ichigo_dev/feed",
 			isEmpty: false,
 		},
-		{
-			name:    "My Qiita Account",
-			url:     "https://qiita.com/igsr5/feed",
-			isEmpty: false,
-		},
+		// {
+		// 	name:    "My Qiita Account",
+		// 	url:     "https://qiita.com/igsr5/feed",
+		// 	isEmpty: false,
+		// },
 		{
 			name:    "My note Account",
 			url:     "https://note.com/ichigo341/rss",
@@ -96,16 +96,16 @@ func TestGetBlogDataFromRSS(t *testing.T) {
 	}
 }
 
-func TestQiitaCrawler(t *testing.T) {
-	items, err := NewQiitaCrawler("https://qiita.com/igsr5/feed").Crawl() // 自分のQiitaアカウント
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if len(items) <= 0 {
-		t.Fatal("items is empty")
-	}
-}
+// func TestQiitaCrawler(t *testing.T) {
+// 	items, err := NewQiitaCrawler("https://qiita.com/igsr5/feed").Crawl() // 自分のQiitaアカウント
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
+//
+// 	if len(items) <= 0 {
+// 		t.Fatal("items is empty")
+// 	}
+// }
 
 func TestConvertRSSToApiURL(t *testing.T) {
 	// e.g. rssUrl → https://qiita.com/igsr5/feed

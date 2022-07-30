@@ -2,12 +2,15 @@ package main
 
 import (
 	"context"
+	"log"
 	"portfolio-backend/infra/models"
 	"portfolio-backend/infra/repository"
 	"portfolio-backend/lib/sentryset"
 	"strings"
 	"time"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
 	"github.com/p1ass/feeder"
 	"github.com/pkg/errors"
@@ -69,6 +72,27 @@ func handler(request events.CloudWatchEvent) error {
 		}
 
 		blogDataList = append(blogDataList, b...)
+	}
+
+	// 3. check status updated blog_data.
+	currentBlogDataList, err := models.BlogFromRSSItems().All(ctx, db)
+	if err != nil {
+		sentry.CaptureException(errors.Wrap(err, "failed to get current blog_data"))
+		return errors.Wrap(err, "failed to get current blog_data")
+	}
+
+	opt := []cmp.Option{
+		cmpopts.IgnoreFields(models.BlogFromRSSItem{}, "ID", "PostedAt"),
+		cmpopts.SortSlices(func(i, j models.BlogFromRSSItem) bool {
+			return i.Title < j.Title
+		}),
+	}
+	diff := cmp.Diff(currentBlogDataList, models.BlogFromRSSItemSlice(blogDataList), opt...)
+	if diff == "" {
+		log.Println("blog_data is no updating")
+		return nil
+	} else {
+		log.Printf("blog_data diff: %s", diff)
 	}
 
 	// 4. reflesh blog data.
