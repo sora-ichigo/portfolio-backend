@@ -211,10 +211,6 @@ Resources:
           Type: Schedule
           Properties:
             Schedule: rate(3 minutes)
-    Environment:
-      Variables:
-        DSN:
-          Ref: DSN
     Role:
       Fn::GetAtt:
       - LambdaExecutionRole
