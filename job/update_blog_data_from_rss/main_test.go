@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"portfolio-backend/infra/models"
 	"portfolio-backend/infra/repository"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/google/uuid"
+	"github.com/otiai10/opengraph/v2"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
@@ -117,4 +119,13 @@ func TestConvertRSSToApiURL(t *testing.T) {
 	if apiUrl != "https://qiita.com/api/v2/users/igsr5/items" {
 		t.Fatal("failed to convert RSS URL to API URL.")
 	}
+}
+
+func TestGetOgpImageUrl(t *testing.T) {
+	ogp, err := opengraph.Fetch("https://github.com/")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fmt.Println(ogp.Image[0].URL, err)
 }

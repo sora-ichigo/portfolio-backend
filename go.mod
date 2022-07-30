@@ -11,11 +11,11 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.5.6
-	github.com/google/martian/v3 v3.2.1
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/igsr5/portfolio-proto/go v0.0.0-20220724195445-7a53b5393fe3
 	github.com/lithammer/shortuuid/v3 v3.0.7
+	github.com/otiai10/opengraph/v2 v2.1.0
 	github.com/p1ass/feeder v1.1.1
 	github.com/pkg/errors v0.9.1
 	github.com/volatiletech/null/v8 v8.1.2
