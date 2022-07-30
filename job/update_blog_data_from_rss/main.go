@@ -24,14 +24,6 @@ import (
 
 var jst *time.Location
 
-func init() {
-	var err error
-	jst, err = time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-
-	}
-}
-
 func main() {
 	lambda.Start(handler)
 }
