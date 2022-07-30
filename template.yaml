@@ -177,7 +177,7 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
   # POST:/blogs ===============================================
 
-  # Update Blog Data from rss job =============================
+  # Job: Update Blog Data from rss ============================
   UpdateBlogDataFromRSSJob:
       Type: AWS::Serverless::Function
       Properties:
@@ -189,11 +189,8 @@ Resources:
                   Type: Schedule
                   Properties:
                       Schedule: rate(3 minutes)
-      Environment:
-        Variables:
-          DSN: !Ref DSN
       Role: !GetAtt LambdaExecutionRole.Arn
-  # Update Blog Data from rss job =============================
+  # Job: Update Blog Data from rss ============================
   
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -223,13 +220,3 @@ Resources:
                 Action:
                     - "ssm:*"
                 Resource: "*"
-# Outputs:
-  # API:
-    # Description: "API Gateway endpoint URL for Prod environment for First Function"
-    # Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-      # HelloWorldFunction:
-      #   Value: !GetAtt PostRSSFeeds.Arn
-      # HelloWorldFunctionIamRole:
-      #   Value: !GetAtt LambdaExecutionRole.Arn
-      # UpdateBlogDataFromRSSJob:
-      #   Value: !GetAtt UpdateBlogDataFromRSSJob.Arn
