@@ -93,6 +93,7 @@ func handler(request events.CloudWatchEvent) error {
 		sentry.CaptureException(errors.Wrap(err, "failed to begin tx"))
 		return errors.Wrap(err, "failed to begin tx")
 	}
+	defer tx.Rollback()
 
 	_, err = models.BlogFromRSSItems().DeleteAll(ctx, tx)
 	if err != nil {
