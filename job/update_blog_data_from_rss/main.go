@@ -12,6 +12,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
+	"github.com/otiai10/opengraph/v2"
 	"github.com/p1ass/feeder"
 	"github.com/pkg/errors"
 	"github.com/volatiletech/null/v8"
@@ -144,7 +145,12 @@ func getBlodDataFromRSSFeed(url string) ([]*models.BlogFromRSSItem, error) {
 		if item.Enclosure != nil {
 			thumbnailURL = item.Enclosure.URL
 		} else {
-			// TODO: ogp image を取得する
+			ogp, err := opengraph.Fetch(item.Link.Href)
+			if err != nil {
+				return nil, errors.Wrap(err, "failed to get ogp")
+			}
+
+			thumbnailURL = ogp.Image[0].URL
 		}
 
 		blogs = append(blogs, &models.BlogFromRSSItem{
