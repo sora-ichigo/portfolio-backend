@@ -3,6 +3,7 @@ package sentryset
 import (
 	"log"
 	"os"
+	"portfolio-backend/lib"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -33,9 +34,7 @@ func CleanUp() {
 	sentry.Flush(2 * time.Second)
 }
 
-type APIGatewayFunc func(events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
-
-func WithCatchErrInAPIGateway(fn APIGatewayFunc) APIGatewayFunc {
+func WithCatchErr(fn lib.APIGatewayFunc) lib.APIGatewayFunc {
 	return func(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 		defer func() {
 			r := recover()
