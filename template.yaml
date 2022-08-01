@@ -15,6 +15,9 @@ Parameters:
   AppEnv:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/app-env
+  ApiKey:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/app-key
 
 Globals:
   Function:
@@ -25,6 +28,7 @@ Globals:
         DSN: !Ref DSN
         SENTRY_DSN: !Ref SentryDSN
         APP_ENV: !Ref AppEnv
+        API_KEY: !Ref ApiKey
 
 Resources:
   DefaultAPI:

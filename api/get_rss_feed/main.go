@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"portfolio-backend/app/di"
+	"portfolio-backend/lib/authset"
 	"portfolio-backend/lib/sentryset"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -19,5 +20,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	lambda.Start(sentryset.WithCatchErrInAPIGateway(app.RSSFeedHandler.GetRSSFeed))
+	lambda.Start(
+		authset.WithApiKeyAuth(
+			sentryset.WithCatchErr(
+				app.RSSFeedHandler.GetRSSFeed,
+			),
+		),
+	)
+
 }
