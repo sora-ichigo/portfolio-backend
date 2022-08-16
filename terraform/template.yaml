@@ -223,7 +223,7 @@ Resources:
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/440e63399d22b45cb71e4f14f49d5eb4
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/7ac4606aa0cca44fa6d56afb4d035bbb
       Handler: update-blog-data-from-rss
       Runtime: go1.x
       Events:
