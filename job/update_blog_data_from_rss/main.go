@@ -85,7 +85,7 @@ func handler(request events.CloudWatchEvent) error {
 	}
 
 	opt := []cmp.Option{
-		cmpopts.IgnoreFields(models.BlogFromRSSItem{}, "ID", "PostedAt"),
+		cmpopts.IgnoreFields(models.BlogFromRSSItem{}, "ID", "PostedAt", "ThumbnailURL"),
 		cmpopts.SortSlices(func(i, j models.BlogFromRSSItem) bool {
 			return i.Title < j.Title
 		}),
