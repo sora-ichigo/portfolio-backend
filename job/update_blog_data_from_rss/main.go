@@ -3,12 +3,15 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	"portfolio-backend/infra/models"
 	"portfolio-backend/infra/repository"
 	"portfolio-backend/lib/sentryset"
 	"strings"
 	"time"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -24,6 +27,7 @@ import (
 )
 
 var jst *time.Location
+var cld *cloudinary.Cloudinary
 
 func main() {
 	lambda.Start(handler)
@@ -32,6 +36,12 @@ func main() {
 func handler(request events.CloudWatchEvent) error {
 	// 0. setup.
 	defer sentryset.CleanUp()
+	var err error
+	cld, err = cloudinary.NewFromParams(
+		os.Getenv("CLOUDINARY_CLOUD_NAME"),
+		os.Getenv("CLOUDINARY_API_KEY"),
+		os.Getenv("CLOUDINARY_SECRET"),
+	)
 
 	ctx := context.Background()
 
@@ -58,7 +68,7 @@ func handler(request events.CloudWatchEvent) error {
 	// 2. get blog_data from rss_feed.
 	blogDataList := []*models.BlogFromRSSItem{}
 	for _, rssFeed := range rssFeeds {
-		b, err := getBlodDataFromRSSFeed(rssFeed.URL)
+		b, err := getBlodDataFromRSSFeed(ctx, rssFeed.URL)
 		if err != nil {
 			sentry.CaptureException(errors.Wrap(err, "failed to get blog_data from rss_feed"))
 			return errors.Wrap(err, "failed to get blog_data from rss_feed")
@@ -119,7 +129,7 @@ func handler(request events.CloudWatchEvent) error {
 	return nil
 }
 
-func getBlodDataFromRSSFeed(url string) ([]*models.BlogFromRSSItem, error) {
+func getBlodDataFromRSSFeed(ctx context.Context, url string) ([]*models.BlogFromRSSItem, error) {
 	var r feeder.Crawler
 	if strings.HasPrefix(url, "https://qiita.com") {
 		r = NewQiitaCrawler(url)
@@ -153,12 +163,20 @@ func getBlodDataFromRSSFeed(url string) ([]*models.BlogFromRSSItem, error) {
 			thumbnailURL = ogp.Image[0].URL
 		}
 
+		resp, err := cld.Upload.Upload(ctx, thumbnailURL, uploader.UploadParams{Folder: "portfolio"})
+		if err != nil {
+			sentry.CaptureException(errors.Wrap(err, "failed to upload image"))
+			return nil, errors.Wrap(err, "failed to upload image")
+		}
+
+		cloudinaryThumbnailURL := resp.SecureURL
+
 		blogs = append(blogs, &models.BlogFromRSSItem{
 			ID:           uuid.String(),
 			Title:        item.Title,
 			SiteURL:      item.Link.Href,
 			PostedAt:     null.TimeFrom(item.Created.In(jst)),
-			ThumbnailURL: thumbnailURL,
+			ThumbnailURL: cloudinaryThumbnailURL,
 			ServiceName:  serviceName,
 		})
 	}
