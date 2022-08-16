@@ -117,7 +117,15 @@ func handler(request events.CloudWatchEvent) error {
 	}
 
 	for _, blogData := range blogDataList {
-		err := blogData.Insert(ctx, tx, boil.Infer())
+		resp, err := cld.Upload.Upload(ctx, blogData.ThumbnailURL, uploader.UploadParams{Folder: "portfolio"})
+		if err != nil {
+			sentry.CaptureException(errors.Wrap(err, "failed to upload image"))
+			return errors.Wrap(err, "failed to upload image")
+		}
+
+		blogData.ThumbnailURL = resp.SecureURL
+
+		err = blogData.Insert(ctx, tx, boil.Infer())
 		if err != nil {
 			sentry.CaptureException(errors.Wrap(err, "failed to insert blog_data"))
 			return errors.Wrap(err, "failed to insert blog_data")
@@ -167,20 +175,12 @@ func getBlodDataFromRSSFeed(ctx context.Context, url string) ([]*models.BlogFrom
 			thumbnailURL = ogp.Image[0].URL
 		}
 
-		resp, err := cld.Upload.Upload(ctx, thumbnailURL, uploader.UploadParams{Folder: "portfolio"})
-		if err != nil {
-			sentry.CaptureException(errors.Wrap(err, "failed to upload image"))
-			return nil, errors.Wrap(err, "failed to upload image")
-		}
-
-		cloudinaryThumbnailURL := resp.SecureURL
-
 		blogs = append(blogs, &models.BlogFromRSSItem{
 			ID:           uuid.String(),
 			Title:        item.Title,
 			SiteURL:      item.Link.Href,
 			PostedAt:     null.TimeFrom(item.Created.In(jst)),
-			ThumbnailURL: cloudinaryThumbnailURL,
+			ThumbnailURL: thumbnailURL,
 			ServiceName:  serviceName,
 		})
 	}
