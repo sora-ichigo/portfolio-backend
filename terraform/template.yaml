@@ -18,6 +18,15 @@ Parameters:
   ApiKey:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/app-key
+  CloudinaryCloudName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/cloudinary-cloud-name
+  CloudinaryApiKey:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/cloudinary-secret
+  CloudinarySecret:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/cloudinary-secret
 Globals:
   Function:
     Timeout: 15
@@ -32,6 +41,12 @@ Globals:
           Ref: AppEnv
         API_KEY:
           Ref: ApiKey
+        CLOUDINARY_CLOUD_NAME:
+          Ref: CloudinaryCloudName
+        CLOUDINARY_API_KEY:
+          Ref: CloudinaryApiKey
+        CLOUDINARY_SECRET:
+          Ref: CloudinarySecret
 Resources:
   DefaultAPI:
     Type: AWS::Serverless::HttpApi
@@ -47,7 +62,7 @@ Resources:
   GetRSSFeeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/46bc34307491a704321a97ef834cccae
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/695bfde538fc57b35282ed89de62df97
       Handler: get_rss_feeds
       Runtime: go1.x
       Architectures:
@@ -70,7 +85,7 @@ Resources:
   GetRSSFeed:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/5505edc04d530a88499145e3f5dc5936
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/db14d389ff3afc0a2c4c6a866db20aa6
       Handler: get_rss_feed
       Runtime: go1.x
       Architectures:
@@ -93,7 +108,7 @@ Resources:
   PostRSSFeed:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/2b88510edc172ed38bc4e8fc87ae03f1
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/38bb481e8b1dfbb1a638903a382d9d29
       Handler: post_rss_feeds
       Runtime: go1.x
       Architectures:
@@ -116,7 +131,7 @@ Resources:
   DeleteRSSFeed:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/13f2628e5d104487e8e27be444733729
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/20c8eb9ec3451ca85b574c24a43e62a3
       Handler: delete_rss_feed
       Runtime: go1.x
       Architectures:
@@ -139,7 +154,7 @@ Resources:
   GetBlogs:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/37ac0357e143a105ceb190f3aefbf3ba
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/e90702c53484751c5faf73642be8e11e
       Handler: get_blogs
       Runtime: go1.x
       Architectures:
@@ -162,7 +177,7 @@ Resources:
   GetBlog:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/e60882399495ed00beacdec8ad96e5fc
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/03a99c73aa27598e3d49fd8f580e21ec
       Handler: get_blog
       Runtime: go1.x
       Architectures:
@@ -185,7 +200,7 @@ Resources:
   CreateBlog:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/f20bc8bc2fe271a9aef3e83f00c6660e
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/98b754ba0e49210d07c15468fd4b016c
       Handler: post_blogs
       Runtime: go1.x
       Architectures:
@@ -208,7 +223,7 @@ Resources:
   UpdateBlogDataFromRSSJob:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://igsr5-portfolio-api-lambda-code/55fa22c4be5a65d696399b7fe191379e
+      CodeUri: s3://igsr5-portfolio-api-lambda-code/440e63399d22b45cb71e4f14f49d5eb4
       Handler: update-blog-data-from-rss
       Runtime: go1.x
       Events:
