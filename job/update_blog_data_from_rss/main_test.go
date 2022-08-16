@@ -87,7 +87,7 @@ func TestGetBlogDataFromRSS(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			i, err := getBlodDataFromRSSFeed(tt.url)
+			i, err := getBlodDataFromRSSFeed(context.Background(), tt.url)
 			if err != nil {
 				t.Fatal(err)
 			}
