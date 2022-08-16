@@ -18,6 +18,15 @@ Parameters:
   ApiKey:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/app-key
+  CloudinaryCloudName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/cloudinary-cloud-name
+  CloudinaryApiKey:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/cloudinary-secret
+  CloudinarySecret:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /portfolio/cloudinary-secret
 
 Globals:
   Function:
@@ -29,6 +38,9 @@ Globals:
         SENTRY_DSN: !Ref SentryDSN
         APP_ENV: !Ref AppEnv
         API_KEY: !Ref ApiKey
+        CLOUDINARY_CLOUD_NAME: !Ref CloudinaryCloudName
+        CLOUDINARY_API_KEY: !Ref CloudinaryApiKey
+        CLOUDINARY_SECRET: !Ref CloudinarySecret
 
 Resources:
   DefaultAPI:
