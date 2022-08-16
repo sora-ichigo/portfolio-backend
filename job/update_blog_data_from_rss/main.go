@@ -42,6 +42,10 @@ func handler(request events.CloudWatchEvent) error {
 		os.Getenv("CLOUDINARY_API_KEY"),
 		os.Getenv("CLOUDINARY_SECRET"),
 	)
+	if err != nil {
+		sentry.CaptureException(errors.Wrap(err, "failed to create cloudinary"))
+		return errors.Wrap(err, "failed to create cloudinary client")
+	}
 
 	ctx := context.Background()
 
