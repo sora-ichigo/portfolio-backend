@@ -23,7 +23,7 @@ Parameters:
     Default: /portfolio/cloudinary-cloud-name
   CloudinaryApiKey:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /portfolio/cloudinary-secret
+    Default: /portfolio/cloudinary-api-key
   CloudinarySecret:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /portfolio/cloudinary-secret
