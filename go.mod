@@ -4,13 +4,14 @@ go 1.18
 
 require (
 	github.com/aws/aws-lambda-go v1.31.1
+	github.com/cloudinary/cloudinary-go/v2 v2.1.0
 	github.com/friendsofgo/errors v0.9.2
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/mock v1.6.0
-	github.com/google/go-cmp v0.5.6
+	github.com/google/go-cmp v0.5.9
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/igsr5/portfolio-proto/go v0.0.0-20220724195445-7a53b5393fe3
@@ -50,7 +51,6 @@ require (
 	github.com/census-instrumentation/opencensus-proto v0.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58 // indirect
-	github.com/cloudinary/cloudinary-go/v2 v2.1.0 // indirect
 	github.com/cncf/udpa/go v0.0.0-20210930031921-04548b0d99d4 // indirect
 	github.com/cncf/xds/go v0.0.0-20211130200136-a8f946100490 // indirect
 	github.com/cockroachdb/cockroach-go/v2 v2.1.1 // indirect
