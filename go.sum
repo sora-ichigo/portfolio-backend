@@ -746,6 +746,8 @@ github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/igsr5/portfolio-proto/go v0.0.0-20220724195445-7a53b5393fe3 h1:hWo3WYRiMO+OWjaUhVIixUilChf0YrqKSk1oW+k3rjM=
 github.com/igsr5/portfolio-proto/go v0.0.0-20220724195445-7a53b5393fe3/go.mod h1:+peDjNz/OiZko1k8fzQ/V1FSViS81MVwDpURivtxjn8=
+github.com/igsr5/portfolio-proto/go v0.0.0-20220724195536-f55d98fec0f4 h1:98fkeZXiOBMQ1hLQKmBy0/HqNE5U9zrN/D9Qy2w5svk=
+github.com/igsr5/portfolio-proto/go v0.0.0-20220724195536-f55d98fec0f4/go.mod h1:+peDjNz/OiZko1k8fzQ/V1FSViS81MVwDpURivtxjn8=
 github.com/imdario/mergo v0.3.5/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/imdario/mergo v0.3.8/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJh5FfA=
 github.com/imdario/mergo v0.3.10/go.mod h1:jmQim1M+e3UYxmgPu/WyfjB3N3VflVyUjjjwH0dnCYA=
