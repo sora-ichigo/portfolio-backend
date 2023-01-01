@@ -199,6 +199,8 @@ func GetServiceName(url string) string {
 		serviceName = "Zenn"
 	case strings.HasPrefix(url, "https://medium.com"):
 		serviceName = "Medium"
+	case strings.HasPrefix(url, "https://igsr5.hatenablog.com"):
+		serviceName = "Hatena"
 	default:
 		serviceName = "unknown"
 	}
