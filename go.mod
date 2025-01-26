@@ -1,6 +1,8 @@
 module portfolio-backend
 
-go 1.18
+go 1.21
+
+toolchain go1.23.5
 
 require (
 	github.com/aws/aws-lambda-go v1.31.1
@@ -22,7 +24,7 @@ require (
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/sqlboiler/v4 v4.6.0
 	github.com/volatiletech/strmangle v0.0.1
-	google.golang.org/protobuf v1.27.1
+	google.golang.org/protobuf v1.36.4
 )
 
 require (
