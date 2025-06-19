@@ -1,6 +1,8 @@
 module portfolio-backend
 
-go 1.18
+go 1.21
+
+toolchain go1.24.4
 
 require (
 	github.com/aws/aws-lambda-go v1.31.1
@@ -11,7 +13,7 @@ require (
 	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/mock v1.6.0
-	github.com/google/go-cmp v0.5.9
+	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/igsr5/portfolio-proto/go v0.0.0-20220724195536-f55d98fec0f4
