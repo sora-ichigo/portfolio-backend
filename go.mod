@@ -8,7 +8,7 @@ require (
 	github.com/friendsofgo/errors v0.9.2
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/gofrs/uuid v4.0.0+incompatible
+	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.5.9
