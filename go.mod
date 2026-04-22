@@ -19,7 +19,7 @@ require (
 	github.com/otiai10/opengraph/v2 v2.1.0
 	github.com/p1ass/feeder v1.1.1
 	github.com/pkg/errors v0.9.1
-	github.com/volatiletech/null/v8 v8.1.2
+	github.com/volatiletech/null/v8 v8.1.3
 	github.com/volatiletech/sqlboiler/v4 v4.6.0
 	github.com/volatiletech/strmangle v0.0.1
 	google.golang.org/protobuf v1.27.1
